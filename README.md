@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="https://github.com/adrianmarino/4w-ros-robot/blob/main/images/robot-v4.png" alt=""/>
+</div>
+
 # Arduino-ROS Library
 
 This library provides a robust framework for integrating micro-ROS on ESP32 microcontrollers using PlatformIO. It facilitates node lifecycle management, Wi-Fi connection, message publishing/subscription, and specific hardware control (BLDC motors and encoders).
