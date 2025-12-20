@@ -2,8 +2,8 @@
   <img src="https://github.com/adrianmarino/4w-ros-robot/blob/main/images/robot-v4.png" alt="Arduino ROS Robot Logo" width="300"/>
   
   # Arduino-ROS Library
-  
-  [![PlatformIO Registry](https://badges.registry.platformio.org/packages/adrianmarino/library/arduino-ros.svg)](https://registry.platformio.org/libraries/adrianmarino/arduino-ros)
+
+  [![PlatformIO Registry](https://img.shields.io/badge/PlatformIO-Registry-red.svg)](https://registry.platformio.org/libraries/adrianmarino/arduino-ros)
   [![Framework](https://img.shields.io/badge/Framework-Arduino-blue.svg)](https://www.arduino.cc/)
   [![ROS 2](https://img.shields.io/badge/ROS%202-Humble-22314E.svg)](https://docs.ros.org/en/humble/index.html)
   [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
