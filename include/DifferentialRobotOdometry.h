@@ -17,6 +17,13 @@ public:
     float getRightWInRad() const { return rightW; }
 
     void updateFrom(
+        float left,
+        float right)
+    {
+        updateFrom(left, right, left, right);
+    }
+
+    void updateFrom(
         float fl,
         float fr,
         float bl,
