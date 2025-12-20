@@ -1,25 +1,30 @@
 #pragma once
 #include <Arduino.h>
 
+/**
+ * @brief Converts robot physical limits and PWM resolution into control values.
+ */
 class VelocityConverter {
-  private:
-    float maxWInRadSeg;
-    int minPwm, maxPwm;
+private:
+  float maxWInRadSeg;
+  int minPwm, maxPwm;
 
-  public:
-    /**
-     * @param maxWInRadSeg Velocidad angular máxima física del robot
-     * @param pwmResolutionInBits Resolución del PWM (Recomendado: 12 bits)
-     * @param minPwm Zona muerta mínima para que el motor empiece a girar
-     */
-    VelocityConverter(
-      float maxWInRadSeg, 
-      int pwmResolutionInBits, 
-      int minPwm
-    );;
+public:
+  /**
+   * @brief Constructor.
+   * @param maxWInRadSeg Maximum physical angular velocity of the robot
+   * @param pwmResolutionInBits PWM resolution (Recommended: 12 bits)
+   * @param minPwm Minimum deadzone for motor to start turning
+   */
+  VelocityConverter(float maxWInRadSeg, int pwmResolutionInBits, int minPwm);
 
-    int wToSignedPWM(float w);
-  
-  private:
-    int getSign(float value);
+  /**
+   * @brief Convert angular velocity to signed PWM.
+   * @param w Angular velocity.
+   * @return Signed PWM value.
+   */
+  int wToSignedPWM(float w);
+
+private:
+  int getSign(float value);
 };

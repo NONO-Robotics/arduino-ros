@@ -1,19 +1,14 @@
 #include "MagneticEncoder.h"
 
-MagneticEncoder::MagneticEncoder(
-    OnUpdateWEvent cb,
-    short int channel,
-    unsigned long sampleIntervalMs,
-    double alpha,
-    bool applyFilter,
-    float deadZone,
-    int address,
-    TwoWire *i2cPort) : sensor(sensor), // Inicializa el puntero al sensor
-                        sampleIntervalMs(sampleIntervalMs),
-                        onUpdateEvent(cb), // Asigna la nueva función de callback
-                        previousStep(0),   // Inicializa el valor anterior a 0
-                        previousUpdateTimeMs(0)
-{
+MagneticEncoder::MagneticEncoder(OnUpdateWEvent cb, short int channel,
+                                 unsigned long sampleIntervalMs, double alpha,
+                                 bool applyFilter, float deadZone, int address,
+                                 TwoWire *i2cPort)
+    : sensor(sensor), // Initialize sensor pointer
+      sampleIntervalMs(sampleIntervalMs),
+      onUpdateEvent(cb), // Assign new callback function
+      previousStep(0),   // Initialize previous value to 0
+      previousUpdateTimeMs(0) {
   this->channel = channel;
   this->applyFilter = applyFilter;
   sensor = new AS5600Sensor(i2cPort, address);
@@ -22,62 +17,59 @@ MagneticEncoder::MagneticEncoder(
   currentStep = 0;
 }
 
-// Inicializa el sensor de la rueda
-bool MagneticEncoder::begin()
-{
-  if (sensor->begin())
-  {                                    // Intenta inicializar el sensor AS5600
-    previousStep = sensor->getValue(); // Obtiene el valor inicial
-    previousUpdateTimeMs = millis();   // Registra el tiempo de inicio
+// Initialize the wheel sensor
+bool MagneticEncoder::begin() {
+  if (sensor->begin()) {               // Try to initialize AS5600 sensor
+    previousStep = sensor->getValue(); // Get initial value
+    previousUpdateTimeMs = millis();   // Register start time
     return true;
-  }
-  else
-  {
+  } else {
     logger.error("Encoder '" + String(channel) + "': Initialization fail.");
     return false;
   }
 }
 
-// Actualiza el estado del sensor de la rueda y calcula la velocidad angular
-void MagneticEncoder::update()
-{
-  unsigned long currentTimeMs = millis(); // Obtiene el tiempo actual una vez
+// Updates the wheel sensor state and calculates angular velocity
+void MagneticEncoder::update() {
+  unsigned long currentTimeMs = millis(); // Get current time once
 
-  // Verifica si ha pasado el intervalo de muestreo deseado
-  if ((currentTimeMs - previousUpdateTimeMs) >= sampleIntervalMs)
-  {
-    sensor->update(); // Realiza una nueva lectura del sensor AS5600
+  // Check if desired sampling interval has passed
+  if ((currentTimeMs - previousUpdateTimeMs) >= sampleIntervalMs) {
+    sensor->update(); // Perform a new reading from AS5600 sensor
 
-    if (sensor->isSuccessful())
-    {
+    if (sensor->isSuccessful()) {
       currentStep = sensor->getValue();
 
-      // Calcula la diferencia de ángulo crudo, manejando el "wrap-around" (0-4095)
+      // Calculate raw angle difference, handling "wrap-around" (0-4095 range)
+      // The AS5600 has a 12-bit resolution (0-4095).
       int diffRaw = (int)currentStep - (int)previousStep;
-      if (diffRaw > 2048)
-      {                  // Si el salto es grande y positivo (ej. 4000 -> 100)
-        diffRaw -= 4096; // Ajusta para el wrap-around
+
+      // Handle wrap-around cases:
+      // If the difference is very large positive, it means we wrapped from 4095
+      // to 0 (forward)
+      if (diffRaw > 2048) {
+        diffRaw -= 4096;
       }
-      else if (diffRaw < -2048)
-      {                  // Si el salto es grande y negativo (ej. 100 -> 4000)
-        diffRaw += 4096; // Ajusta para el wrap-around
+      // If the difference is very large negative, it means we wrapped from 0 to
+      // 4095 (reverse)
+      else if (diffRaw < -2048) {
+        diffRaw += 4096;
       }
 
-      // Calcula la diferencia de tiempo en milisegundos
+      // Calculate time difference in milliseconds
       unsigned long deltaTimeMs = currentTimeMs - previousUpdateTimeMs;
 
-      currentW = wCalculator->getWInRadBySec(diffRaw, deltaTimeMs, this->applyFilter);
+      currentW =
+          wCalculator->getWInRadBySec(diffRaw, deltaTimeMs, this->applyFilter);
 
       onUpdateEvent(channel, currentStep, currentW);
 
-      // Actualiza los valores anteriores para la próxima iteración,
-      // independientemente de si se superó el umbral. Esto asegura que
-      // la velocidad angular siempre se calcule desde la última lectura exitosa.
+      // Update previous values for next iteration,
+      // regardless of whether threshold was exceeded. This ensures that
+      // angular velocity is always calculated from the last successful reading.
       previousStep = currentStep;
       previousUpdateTimeMs = currentTimeMs;
-    }
-    else
-    {
+    } else {
       logger.error("Encoder '" + String(channel) + "': Cant read a value.");
     }
   }

@@ -1,45 +1,37 @@
 #include "VelocityConverter.h"
 
-VelocityConverter::VelocityConverter(
-    float maxWInRadSeg,
-    int pwmResolutionInBits,
-    int minPwm)
-{
+VelocityConverter::VelocityConverter(float maxWInRadSeg,
+                                     int pwmResolutionInBits, int minPwm) {
   this->maxWInRadSeg = maxWInRadSeg;
-  // Calculamos el valor máximo basado en bits (ej. 12 bits -> 4095)
+  // Calculate max value based on bits (e.g. 12 bits -> 4095)
   this->maxPwm = (int)((1UL << pwmResolutionInBits) - 1);
   this->minPwm = minPwm;
 };
 
-int VelocityConverter::wToSignedPWM(float w)
-{
-  // Zona muerta de software absoluta (ruido cero)
+int VelocityConverter::wToSignedPWM(float w) {
+  // Absolute software deadzone (zero noise)
   if (abs(w) < 0.01)
     return 0;
 
-  // Limitamos la entrada para no exceder la física del robot
+  // Limit input to not exceed robot physics
   if (abs(w) > maxWInRadSeg)
     w = getSign(w) * maxWInRadSeg;
 
-  // Cálculo de mapeo con aritmética de punto flotante para precisión
-  // PWM = ( |Omega Actual| / Omega Máxima ) * MaxPWM_Counts
+  // Mapping calculation with floating point arithmetic for precision
+  // PWM = ( |Current Omega| / Max Omega ) * MaxPWM_Counts
   float pwm = (abs(w) / maxWInRadSeg) * (float)maxPwm;
 
-  // Mapeo de Zona Muerta del Motor (Deadzone compensation)
-  // Si el cálculo da 1 pero el motor necesita 50 para moverse, ajustamos.
-  if (pwm > 0 && pwm < minPwm)
-  {
+  // Motor Deadzone Compensation
+  // If calculation gives 1 but motor needs 50 to move, we adjust.
+  if (pwm > 0 && pwm < minPwm) {
     pwm = minPwm;
   }
 
-  // Clamp final de seguridad
+  // Final safety clamp
   if (pwm > maxPwm)
     pwm = maxPwm;
 
   return getSign(w) * (int)pwm;
 };
 
-int VelocityConverter::getSign(float value)
-{
-  return value > 0 ? 1 : -1;
-}
+int VelocityConverter::getSign(float value) { return value > 0 ? 1 : -1; }

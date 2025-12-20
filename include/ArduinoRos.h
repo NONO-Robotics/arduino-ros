@@ -1,11 +1,32 @@
-#include <Arduino.h>
+/**
+ * @file ArduinoRos.h
+ * @brief Master #include file for the Arduino-ROS robot project.
+ *
+ * This file #includes all necessary headers for the project components,
+ * including sensors, motors, publishers, subscribers, and ROS utilities.
+ */
+#include "AS5600Sensor.h"
+#include "BLDCMotor.h"
+#include "BLDCMotorBuilder.h"
+#include "DifferentialRobotOdometry.h"
+#include "DifferentialRobotOdometryPublisher.h"
+#include "FWAngularSpeed.h"
+#include "FWKinematics.h"
 #include "FloatArrayPublisher.h"
 #include "FloatPublisher.h"
-#include "FWAngularSpeed.h"
+#include "FourWheelsRobotW.h"
 #include "IntPublisher.h"
+#include "MagneticEncoder.h"
+#include "MagneticEncoderBuilder.h"
+#include "MecanumKinematics.h"
 #include "MicroRosPublisher.h"
 #include "RosMessage.h"
 #include "RosNodeManager.h"
+#include "RosNodeManagerRestartHandler.h"
 #include "RosTwistSubscriber.h"
 #include "RosUtils.h"
 #include "StringPublisher.h"
+#include "TwoWheelsRobotW.h"
+#include "VelocityConverter.h"
+#include "WCalculator.h"
+#include "WToPWMConverter.h"
