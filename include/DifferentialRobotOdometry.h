@@ -1,5 +1,8 @@
 #pragma once
 
+#include "TwoWheelsRobotW.h"
+#include "FourWheelsRobotW.h"
+
 class DifferentialRobotOdometry
 {
 private:
@@ -16,20 +19,14 @@ public:
 
     float getRightWInRad() const { return rightW; }
 
-    void updateFrom(
-        float left,
-        float right)
+    void updateFrom(TwoWheelsRobotW robotW)
     {
-        updateFrom(left, right, left, right);
+        updateFrom({robotW.left, robotW.right, robotW.left, robotW.right});
     }
 
-    void updateFrom(
-        float fl,
-        float fr,
-        float bl,
-        float br)
+    void updateFrom(FourWheelsRobotW robotW)
     {
-        leftW = (fl + bl) / 2.0f;
-        rightW = (fr + br) / 2.0f;
+        leftW = (robotW.fl + robotW.bl) / 2.0f;
+        rightW = (robotW.fr + robotW.br) / 2.0f;
     }
 };
