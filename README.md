@@ -140,7 +140,6 @@ Specialized subscriber for `geometry_msgs/msg/Twist` (velocity commands).
 ### Utilities
 
 *   **`WToSignedPWMConverter`**: Maps rad/s to PWM with deadzone compensation.
-*   **`WToPWMConverter`**: Simple linear mapping from angular velocity to PWM.
 
 ---
 
