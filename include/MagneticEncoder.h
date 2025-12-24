@@ -2,8 +2,8 @@
 #include "AS5600Sensor.h"
 #include <AS5600Sensor.h>
 #include <Arduino.h>
+#include <EncoderAngularVelocityEstimator.h>
 #include <Logger.h>
-#include <WCalculator.h>
 #include <math.h>
 
 typedef void (*OnUpdateWEvent)(short int channel, int step, float w);
@@ -27,7 +27,7 @@ private:
   OnUpdateWEvent
       onUpdateEvent; ///< Function to call when angular velocity changes
 
-  WCalculator *wCalculator;
+  EncoderAngularVelocityEstimator *wEstimator;
   float currentW;
   uint16_t currentStep;
 

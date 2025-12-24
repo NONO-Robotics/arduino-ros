@@ -1,5 +1,5 @@
 /**
- * @file ArduinoRos.h
+ * @file ArduinoRos.h"
  * @brief Master #include file for the Arduino-ROS robot project.
  *
  * This file #includes all necessary headers for the project components,
@@ -10,11 +10,17 @@
 #include "BLDCMotorBuilder.h"
 #include "DifferentialRobotOdometry.h"
 #include "DifferentialRobotOdometryPublisher.h"
+#include "EncoderAngularVelocityEstimator.h"
 #include "FWAngularSpeed.h"
-#include "FWKinematics.h"
 #include "FloatArrayPublisher.h"
 #include "FloatPublisher.h"
 #include "FourWheelsRobotW.h"
+#include "GPSData.h"
+#include "GPSPublisher.h"
+#include "GPSSensor.h"
+#include "IMUData.h"
+#include "IMUPublisher.h"
+#include "IMUSensor.h"
 #include "IntPublisher.h"
 #include "MagneticEncoder.h"
 #include "MagneticEncoderBuilder.h"
@@ -27,6 +33,4 @@
 #include "RosUtils.h"
 #include "StringPublisher.h"
 #include "TwoWheelsRobotW.h"
-#include "VelocityConverter.h"
-#include "WCalculator.h"
-#include "WToPWMConverter.h"
+#include "WToSignedPWMConverter.h"

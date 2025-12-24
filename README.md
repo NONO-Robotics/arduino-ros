@@ -115,9 +115,7 @@ Reads AS5600 I2C magnetic sensors and calculates angular velocity ($w$).
 
 ### Kinematics & Odometry
 
-#### **`MecanumKinematics`** / **`FWKinematics`**
-Inverse kinematics solvers. `FWKinematics` is for generic 4-wheel bases, `MecanumKinematics` specifically for Mecanum.
-
+#### **`MecanumKinematics`**   **`MecanumKinematics`**: Handles kinematic equations for Mecanum wheeled robots (converts Twist to wheel speeds).
 *   **Methods**: `twistTofwAngularSpeed(Twist *msg, FWAngularSpeed *out)`
 
 #### **`DifferentialRobotOdometry`**
@@ -141,7 +139,7 @@ Specialized subscriber for `geometry_msgs/msg/Twist` (velocity commands).
 
 ### Utilities
 
-*   **`VelocityConverter`**: Maps rad/s to PWM with deadzone compensation.
+*   **`WToSignedPWMConverter`**: Maps rad/s to PWM with deadzone compensation.
 *   **`WToPWMConverter`**: Simple linear mapping from angular velocity to PWM.
 
 ---
@@ -160,7 +158,7 @@ Specialized subscriber for `geometry_msgs/msg/Twist` (velocity commands).
 RosNodeManager *nodeManager;
 RosTwistSubscriber *sub;
 BLDCMotor *motor;
-VelocityConverter *conv;
+WToSignedPWMConverter *conv;
 
 void onCmdVel(const void *msg) {
     float linearX = ((geometry_msgs__msg__Twist *)msg)->linear.x;
@@ -171,7 +169,7 @@ void onCmdVel(const void *msg) {
 void setup() {
     motor = new BLDCMotorBuilder(25, 26, 27).build();
     motor->setup();
-    conv = new VelocityConverter(10.0, 12, 100);
+    conv = new WToSignedPWMConverter(10.0, 12, 100);
 
     nodeManager = new RosNodeManager("bot_node", WIFI_SSID, WIFI_PASS, AGENT_IP);
     nodeManager->setup();

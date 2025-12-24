@@ -1,7 +1,7 @@
 #pragma once
 
+#include "EncoderAngularVelocityEstimator.h"
 #include "MagneticEncoder.h"
-#include "WCalculator.h"
 
 /**
  * @brief Builder class for MagneticEncoder.

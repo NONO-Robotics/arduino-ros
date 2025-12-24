@@ -9,7 +9,7 @@ const float DEFAULT_DEAD_ZONE = 0.55;
 /**
  * @brief Calculates angular velocity from encoder steps over time.
  */
-class WCalculator {
+class EncoderAngularVelocityEstimator {
 
 private:
   // Conversion factor from raw encoder units (12-bit, 4096 steps) to radians.
@@ -25,10 +25,11 @@ public:
    * @param alpha Filter smoothing factor.
    * @param deadZone Deadzone for velocity.
    */
-  WCalculator(double alpha = DEFAULT_ALPHA, float deadZone = DEFAULT_DEAD_ZONE)
+  EncoderAngularVelocityEstimator(double alpha = DEFAULT_ALPHA,
+                                  float deadZone = DEFAULT_DEAD_ZONE)
       : filter(new Ewma(alpha)), deadZone(deadZone) {}
 
-  ~WCalculator() { delete filter; }
+  ~EncoderAngularVelocityEstimator() { delete filter; }
 
   /**
    * @brief Calculate angular velocity (W) in rad/s.

@@ -12,7 +12,7 @@ MagneticEncoder::MagneticEncoder(OnUpdateWEvent cb, short int channel,
   this->channel = channel;
   this->applyFilter = applyFilter;
   sensor = new AS5600Sensor(i2cPort, address);
-  wCalculator = new WCalculator(alpha, deadZone);
+  wEstimator = new EncoderAngularVelocityEstimator(alpha, deadZone);
   currentW = 0;
   currentStep = 0;
 }
@@ -60,7 +60,7 @@ void MagneticEncoder::update() {
       unsigned long deltaTimeMs = currentTimeMs - previousUpdateTimeMs;
 
       currentW =
-          wCalculator->getWInRadBySec(diffRaw, deltaTimeMs, this->applyFilter);
+          wEstimator->getWInRadBySec(diffRaw, deltaTimeMs, this->applyFilter);
 
       onUpdateEvent(channel, currentStep, currentW);
 
