@@ -1,10 +1,13 @@
 #include "WToSignedPWMConverter.h"
 
-WToSignedPWMConverter::WToSignedPWMConverter(float maxW,
+WToSignedPWMConverter::WToSignedPWMConverter(
+                                             float maxW,
                                              int pwmResolutionInBits,
-                                             int minPwm) {
+                                             int minPwm,
+                                             int maxPwm) {
   this->maxW = maxW;
-  this->maxPwm = (int)((1UL << pwmResolutionInBits) - 1);
+  this->maxPwmLimit = (int)((1UL << pwmResolutionInBits) - 1);
+  this->maxPwm = maxPwm;
   this->minPwm = minPwm;
 };
 
@@ -13,25 +16,16 @@ int WToSignedPWMConverter::convert(float w) {
   if (abs(w) < 0.01)
     return 0;
 
-  // Limit input to not exceed robot physics
-  if (abs(w) > maxW)
-    w = getSign(w) * maxW;
-
   // Mapping calculation with floating point arithmetic for precision
-  // PWM = ( |Current Omega| / Max Omega ) * MaxPWM_Counts
-  float pwm = (abs(w) / maxW) * (float)maxPwm;
+  // PWM = ( |Current Omega| / Max Omega ) * maxPwmLimit_Counts
+  int pwm = (abs(w) / maxW) * (float)maxPwmLimit;
 
-  // Motor Deadzone Compensation
-  // If calculation gives 1 but motor needs 50 to move, we adjust.
-  if (pwm > 0 && pwm < minPwm) {
-    pwm = minPwm;
-  }
+  pwm = clamp(
+    pwm, 
+    minPwm, 
+    maxPwm > 0 ? maxPwm: maxPwmLimit);
 
-  // Final safety clamp
-  if (pwm > maxPwm)
-    pwm = maxPwm;
-
-  return getSign(w) * (int)pwm;
+  return sign(w) * pwm;
 };
 
-int WToSignedPWMConverter::getSign(float value) { return value > 0 ? 1 : -1; }
+
