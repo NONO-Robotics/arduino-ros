@@ -99,29 +99,6 @@ Control logic for Brushless DC motors (PWM + Direction + Brake).
                         .build();
     ```
 
-#### **`MagneticEncoder` (AS5600)**
-Reads AS5600 I2C magnetic sensors and calculates angular velocity ($w$).
-
-*   **Include**: `#include "MagneticEncoder.h"`, `#include "MagneticEncoderBuilder.h"`
-*   **Builder**:
-    ```cpp
-    MagneticEncoder *enc = MagneticEncoderBuilder()
-                           .setCallback(cb)
-                           .setI2CAddress(0x36)
-                           .build();
-    ```
-
----
-
-### Kinematics & Odometry
-
-#### **`MecanumKinematics`**   **`MecanumKinematics`**: Handles kinematic equations for Mecanum wheeled robots (converts Twist to wheel speeds).
-*   **Methods**: `twistTofwAngularSpeed(Twist *msg, FWAngularSpeed *out)`
-
-#### **`DifferentialRobotOdometry`**
-Tracks robot pose based on wheel velocities.
-*   **Methods**: `updateFrom(states)`, `getLeftWInRad()`, `getRightWInRad()`.
-
 ---
 
 ### Communication
@@ -134,12 +111,6 @@ Wrappers for standard messages.
 #### **`RosTwistSubscriber`**
 Specialized subscriber for `geometry_msgs/msg/Twist` (velocity commands).
 *   **Callback Signature**: `void onCmd(const void *msg)`
-
----
-
-### Utilities
-
-*   **`WToSignedPWMConverter`**: Maps rad/s to PWM with deadzone compensation.
 
 ---
 
