@@ -1,5 +1,5 @@
 #pragma once
-
+#include "IMUData.h"
 #include <sensor_msgs/msg/imu.h> 
 
 class IMUMsgWriter
@@ -9,5 +9,5 @@ private:
 
 public:
     IMUMsgWriter(sensor_msgs__msg__Imu *msg);
-    void writer(sensor_msgs__msg__Imu &msg) const;
+    void writer(IMUData *imuData) const;
 };
