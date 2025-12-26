@@ -5,7 +5,7 @@ IMUMsgWriter::IMUMsgWriter(sensor_msgs__msg__Imu *msg)
     this->msg = msg;
 }
 
-void IMUMsgWriter::writer(IMUData *imuData) const
+void IMUMsgWriter::write(IMUData *imuData) const
 {
     // Map the private data members of this class to the ROS message fields
     msg->orientation.w = imuData->getOrientationW();

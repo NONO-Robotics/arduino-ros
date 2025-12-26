@@ -6,9 +6,11 @@
 #include <micro_ros_platformio.h>
 #include <rclc/rclc.h>
 #include <rclc/executor.h>
+
 #include "IMUData.h"
 #include "Logger.h"
 #include "StringUtils.h"
+#include "IMUMsgWriter.h"
 
 class IMUPublisher
 {
@@ -19,6 +21,7 @@ private:
     sensor_msgs__msg__Imu msg;
     rcl_node_t *node_ptr; // Store pointer for cleanup
     String frameId;
+    IMUMsgWriter *msgWriter;
 
 public:
     // Constructor: Initializes the publisher.
@@ -29,5 +32,5 @@ public:
         String frameId = "imu_link");
 
     // Publishes the IMU data.
-    void publish(const IMUData *data);
+    void publish(IMUData *data);
 };

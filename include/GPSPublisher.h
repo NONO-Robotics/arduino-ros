@@ -5,12 +5,11 @@
 #include <micro_ros_platformio.h>
 #include <rclc/rclc.h>
 #include <rclc/executor.h>
-#include <sensor_msgs/msg/nav_sat_fix.h>
-#include <geometry_msgs/msg/vector3.h>
 
 #include "GPSData.h"
 #include "Logger.h"
 #include "StringUtils.h"
+#include "NavSatFixMsgWriter.h"
 
 class GPSPublisher
 {
@@ -21,6 +20,7 @@ private:
     sensor_msgs__msg__NavSatFix msg;
     rcl_node_t *node_ptr; // Store pointer for cleanup
     String frameId;
+    NavSatFixMsgWriter *msgWriter;
 
 public:
     // Constructor: Initializes the publisher.

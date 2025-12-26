@@ -9,5 +9,5 @@ private:
 
 public:
     IMUMsgWriter(sensor_msgs__msg__Imu *msg);
-    void writer(IMUData *imuData) const;
+    void write(IMUData *imuData) const;
 };

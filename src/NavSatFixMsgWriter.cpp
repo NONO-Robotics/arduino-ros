@@ -1,11 +1,11 @@
-#include "NavSatFixMsgWirter.h"
+#include "NavSatFixMsgWriter.h"
 
-NavSatFixMsgWirter::NavSatFixMsgWirter(sensor_msgs__msg__NavSatFix *msg)
+NavSatFixMsgWriter::NavSatFixMsgWriter(sensor_msgs__msg__NavSatFix *msg)
 {
     this->msg = msg;
 }
 
-void NavSatFixMsgWirter::write(GPSData *gpsData)
+void NavSatFixMsgWriter::write(GPSData *gpsData)
 {
     // Indicar siempre que el servicio es GPS
     msg->status.service = sensor_msgs__msg__NavSatStatus__SERVICE_GPS;

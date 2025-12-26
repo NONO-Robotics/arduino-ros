@@ -7,7 +7,6 @@
  */
 #include "DifferentialRobotOdometry.h"
 #include "DifferentialRobotOdometryPublisher.h"
-#include "EncoderAngularVelocityEstimator.h"
 #include "FloatArrayPublisher.h"
 #include "FloatPublisher.h"
 #include "FourWheelsRobotW.h"
@@ -16,7 +15,7 @@
 #include "IMUPublisher.h"
 #include "IntPublisher.h"
 #include "MicroRosPublisher.h"
-#include "NavSatFixMsgWirter.h"
+#include "NavSatFixMsgWriter.h"
 #include "RosMessage.h"
 #include "RosNodeManager.h"
 #include "RosNodeManagerRestartHandler.h"

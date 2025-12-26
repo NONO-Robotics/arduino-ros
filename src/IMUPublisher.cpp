@@ -39,12 +39,14 @@ IMUPublisher::IMUPublisher(
     // 4. Establecer el tamaño del string.
     msg.header.frame_id.size = strlen(msg.header.frame_id.data);
 
+    msgWriter = new IMUMsgWriter(&msg);
+
     logger.info("IMU publisher created on " + topic_name + " topic.");
 }
 
-void IMUPublisher::publish(const IMUData* data)
+void IMUPublisher::publish(IMUData* data)
 {
-    data->writeTo(msg);
+    msgWriter->write(data);
 
     this->prepareMsg();
 

@@ -39,12 +39,14 @@ GPSPublisher::GPSPublisher(
     // 4. Establecer el tamaño del string.
     msg.header.frame_id.size = strlen(msg.header.frame_id.data);
 
+    msgWriter = new NavSatFixMsgWriter(&msg);
+
     logger.info("GPS publisher created on " + topic_name + " topic.");
 }
 
 void GPSPublisher::publish(GPSData* data)
 {
-    data->writeTo(msg);
+    msgWriter->write(data);
 
     this->prepareMsg();
 

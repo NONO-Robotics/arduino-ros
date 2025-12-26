@@ -1,14 +1,14 @@
 #pragma once
 
 #include <GPSData.h>
-#include "sensor_msgs/msg/nav_sat_fix.h"
+#include <sensor_msgs/msg/nav_sat_fix.h>
 
-class NavSatFixMsgWirter
+class NavSatFixMsgWriter
 {
 private:
     sensor_msgs__msg__NavSatFix *msg;
 
 public:
-    NavSatFixMsgWirter(sensor_msgs__msg__NavSatFix *msg);
+    NavSatFixMsgWriter(sensor_msgs__msg__NavSatFix *msg);
     void write(GPSData *gpsData);
 };
