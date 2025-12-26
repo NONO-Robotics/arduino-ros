@@ -50,7 +50,9 @@ void IMUPublisher::publish(IMUData* data)
 
     this->prepareMsg();
 
-    rcl_publish(&publisher, &msg, NULL);
+    if(RCL_RET_ERROR == rcl_publish(&publisher, &msg, NULL)) {
+        logger.error("Failed to publish IMU data.");
+    }
 }
 
 void IMUPublisher::prepareMsg()

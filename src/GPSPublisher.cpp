@@ -50,7 +50,9 @@ void GPSPublisher::publish(GPSData* data)
 
     this->prepareMsg();
 
-    rcl_publish(&publisher, &msg, NULL);
+    if(RCL_RET_ERROR == rcl_publish(&publisher, &msg, NULL)) {
+        logger.error("Failed to publish GPS data.");
+    }
 }
 
 void GPSPublisher::prepareMsg()
