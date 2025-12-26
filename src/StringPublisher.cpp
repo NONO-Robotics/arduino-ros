@@ -22,7 +22,7 @@ StringPublisher::StringPublisher(MicroRosPublisher *publisher) : publisher(publi
     }
 }
 
-~StringPublisher::StringPublisher()
+StringPublisher::~StringPublisher()
 {
     if (msg)
     {
