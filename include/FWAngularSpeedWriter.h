@@ -3,24 +3,25 @@
 #include <geometry_msgs/msg/twist.h>
 
 /**
- * MecanumKinematics class for calculating wheel speeds and robot movement data.
+ * FWAngularSpeedWriter class for calculating wheel speeds and robot movement data.
  *
  * This class provides methods to convert robot movement data to wheel speeds
  * and vice versa, using the kinematic equations for a Mecanum wheeled robot.
  */
-class MecanumKinematics {
+class FWAngularSpeedWriter {
 private:
   float r;
   float k;
+  FWAngularSpeed *speed;
 
 public:
   /**
-   * Constructor for MecanumKinematics.
+   * Constructor for FWAngularSpeedWriter.
    * @param l Distance between the front and rear wheels
    * @param w Distance between the left and right wheels
    * @param r Wheel radius
    */
-  MecanumKinematics(float l, float w, float r);
+  FWAngularSpeedWriter(float l, float w, float r, FWAngularSpeed *speed);
 
   /**
    * Convert robot movement data to wheel speeds.
@@ -28,6 +29,5 @@ public:
    * @param speeds Pointer to fwAngularSpeed object to store the calculated
    * wheel speeds
    */
-  void twistTofwAngularSpeed(geometry_msgs__msg__Twist *twist,
-                             FWAngularSpeed *speed);
+  void write(geometry_msgs__msg__Twist *twist);
 };

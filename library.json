@@ -11,10 +11,7 @@
     "frameworks": "*",
     "platforms": "*",
     "dependencies": {
-        "micro_ros_platformio": "https://github.com/micro-ROS/micro_ros_platformio",
-        "EWMA": "https://github.com/jonnieZG/EWMA",
         "arduino-commons": "https://github.com/adrianmarino/arduino-commons",
-        "imu": "adafruit/Adafruit BNO08x@^1.2.5",
-        "gps": "mikalhart/TinyGPSPlus@^1.0.2"
+        "micro_ros_platformio": "https://github.com/micro-ROS/micro_ros_platformio"
     }
 }

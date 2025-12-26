@@ -1,12 +1,14 @@
-#include "MecanumKinematics.h"
+#include "FWAngularSpeedWriter.h"
 
-MecanumKinematics::MecanumKinematics(float l, float w, float r) {
+FWAngularSpeedWriter::FWAngularSpeedWriter(float l, float w, float r, FWAngularSpeed *speed) {
   this->r = r;
   this->k = l + w;
+  this->speed = speed;
 }
 
-void MecanumKinematics::twistTofwAngularSpeed(geometry_msgs__msg__Twist *twist,
-                                              FWAngularSpeed *speed) {
+void FWAngularSpeedWriter::write(
+  geometry_msgs__msg__Twist *twist
+) {
   float vx = twist->linear.x;
   float vy = twist->linear.y;
   float wz = twist->angular.z;
