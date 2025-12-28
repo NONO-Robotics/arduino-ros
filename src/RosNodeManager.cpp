@@ -1,30 +1,29 @@
 #include <RosNodeManager.h>
 
-RosNodeManager::RosNodeManager(String nodeName, String wifi_ssid,
-                               String wifi_pass, String agent_ip,
-                               uint16_t agent_port, bool wifiEnergySavingMode,
-                               wifi_power_t wifi_power, bool syncTime) {
+RosNodeManager::RosNodeManager(
+    String nodeName,
+    bool wifiEnergySavingMode,
+    wifi_power_t wifi_power,
+    bool syncTime)
+{
   this->nodeName = nodeName;
-  this->wifi_ssid = wifi_ssid;
-  this->wifi_pass = wifi_pass;
-  this->agent_ip = agent_ip;
-  this->agent_port = agent_port;
   this->wifiEnergySavingMode = wifiEnergySavingMode;
   this->wifi_power = wifi_power;
   this->syncTime = syncTime;
+  wifiConnectionManager = new WifiConnectionManager(
+      nodeName,
+      wifiEnergySavingMode,
+      wifi_power);
 }
 
-void RosNodeManager::initWifi() {
-  logger.info("Wait for wifi connection...");
-  connect_to_agent_via_wifi(nodeName, wifi_ssid, wifi_pass, agent_ip,
-                            agent_port, wifiEnergySavingMode, wifi_power);
-}
-
-RosNodeManager *RosNodeManager::setup() {
+RosNodeManager *RosNodeManager::setup()
+{
   // 1. Initialize Wi-Fi and Synchronize Time
-  this->initWifi();
+  logger.info("Wait for wifi connection...");
+  this->wifiConnectionManager->connect();
 
-  if (syncTime) {
+  if (syncTime)
+  {
     syncClockTimeStamp(AR_UTC_TIME_OFFSET_IN_SECONDS);
   }
 
@@ -56,11 +55,13 @@ rcl_allocator_t *RosNodeManager::getAllocator() { return &allocator; }
 
 rclc_executor_t *RosNodeManager::getExecutor() { return &executor; }
 
-bool RosNodeManager::update(const uint64_t timeout_ns) {
+bool RosNodeManager::update(const uint64_t timeout_ns)
+{
   return assertOk(rclc_executor_spin_some(&executor, timeout_ns),
                   "Cant't Node Manager state");
 }
 
-bool RosNodeManager::isConnected(const int timeout_ms, const uint8_t attempts) {
+bool RosNodeManager::isConnected(const int timeout_ms, const uint8_t attempts)
+{
   return rmw_uros_ping_agent(timeout_ms, attempts) == RMW_RET_OK;
 }

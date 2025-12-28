@@ -4,6 +4,7 @@
 #include <Logger.h>
 #include <rclc/executor.h>
 #include <timestamp.h>
+#include "WifiConnectionManager.h"
 
 /**
  * @brief Class for managing a ROS node.
@@ -16,10 +17,6 @@ class RosNodeManager
 {
 private:
     String nodeName;
-    String wifi_ssid;
-    String wifi_pass;
-    String agent_ip;
-    uint16_t agent_port;
     rclc_support_t support;
     rcl_allocator_t allocator = rcl_get_default_allocator();
     rcl_node_t node;
@@ -27,24 +24,16 @@ private:
     bool wifiEnergySavingMode;
     wifi_power_t wifi_power;
     bool syncTime;
+    WifiConnectionManager *wifiConnectionManager;
 
-    void initWifi();
 public:
     /**
      * @brief Constructor for RosNodeManager.
      *
      * @param nodeName Name of the ROS node.
-     * @param wifi_ssid Wi-Fi SSID for connection.
-     * @param wifi_pass Wi-Fi password for connection.
-     * @param agent_ip IP address of the micro-ROS agent.
-     * @param agent_port Port number of the micro-ROS agent (default is 8888).
      */
     RosNodeManager(
         String nodeName,
-        String wifi_ssid,
-        String wifi_pass,
-        String agent_ip,
-        uint16_t agent_port = 8888,
         bool wifiEnergySavingMode = false,
         wifi_power_t wifi_power = WIFI_POWER_20_5dBm,
         bool syncTime = true

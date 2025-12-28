@@ -12,6 +12,7 @@
     "platforms": "*",
     "dependencies": {
         "arduino-commons": "https://github.com/adrianmarino/arduino-commons",
-        "micro_ros_platformio": "https://github.com/micro-ROS/micro_ros_platformio"
+        "micro_ros_platformio": "https://github.com/micro-ROS/micro_ros_platformio",
+        "WiFiManager": "https://github.com/tzapu/WiFiManager"
     }
 }
