@@ -5,6 +5,7 @@
 #include <rclc/executor.h>
 #include <timestamp.h>
 #include "WifiConnectionManager.h"
+#include <WifiResetDetector.h>
 
 /**
  * @brief Class for managing a ROS node.
@@ -25,6 +26,7 @@ private:
     wifi_power_t wifi_power;
     bool syncTime;
     WifiConnectionManager *wifiConnectionManager;
+    WifiResetDetector wifiResetDetector;
 
 public:
     /**

@@ -18,6 +18,8 @@ RosNodeManager::RosNodeManager(
 
 RosNodeManager *RosNodeManager::setup()
 {
+  wifiResetDetector.setup();
+
   // 1. Initialize Wi-Fi and Synchronize Time
   logger.info("Wait for wifi connection...");
   this->wifiConnectionManager->connect();
@@ -57,6 +59,7 @@ rclc_executor_t *RosNodeManager::getExecutor() { return &executor; }
 
 bool RosNodeManager::update(const uint64_t timeout_ns)
 {
+  wifiResetDetector.update();
   return assertOk(rclc_executor_spin_some(&executor, timeout_ns),
                   "Cant't Node Manager state");
 }

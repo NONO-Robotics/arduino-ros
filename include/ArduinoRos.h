@@ -22,7 +22,7 @@
 #include "RosTwistSubscriber.h"
 #include "RosUtils.h"
 #include "StringPublisher.h"
-
+#include <WifiResetDetector.h>
 
 
 
