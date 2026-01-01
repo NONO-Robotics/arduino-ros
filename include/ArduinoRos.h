@@ -9,8 +9,6 @@
 #include "DifferentialRobotOdometryPublisher.h"
 #include "FloatArrayPublisher.h"
 #include "FloatPublisher.h"
-#include "FourWheelsRobotW.h"
-#include "FWAngularSpeed.h"
 #include "GPSPublisher.h"
 #include "IMUPublisher.h"
 #include "IntPublisher.h"

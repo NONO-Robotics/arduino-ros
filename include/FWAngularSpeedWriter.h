@@ -1,5 +1,5 @@
 #pragma once
-#include "FWAngularSpeed.h"
+#include "FourWheelAngularSpeed.h"
 #include <geometry_msgs/msg/twist.h>
 
 /**
@@ -21,7 +21,7 @@ public:
    * @param w Distance between the left and right wheels
    * @param r Wheel radius
    */
-  FWAngularSpeedWriter(float l, float w, float r, FWAngularSpeed *speed);
+  FWAngularSpeedWriter(float l, float w, float r, FourWheelAngularSpeed *speed);
 
   /**
    * Convert robot movement data to wheel speeds.

@@ -1,6 +1,6 @@
 #include "FWAngularSpeedWriter.h"
 
-FWAngularSpeedWriter::FWAngularSpeedWriter(float l, float w, float r, FWAngularSpeed *speed) {
+FWAngularSpeedWriter::FWAngularSpeedWriter(float l, float w, float r, FourWheelAngularSpeed *speed) {
   this->r = r;
   this->k = l + w;
   this->speed = speed;
