@@ -8,7 +8,7 @@ private:
     MultiResetDetector *mrd;
 
 public:
-    WifiResetDetector(uint32_t windowMs = 20000, uint8_t targetResets = 3)
+    WifiResetDetector(uint32_t windowMs = 10000, uint8_t targetResets = 3)
     {
         mrd = new MultiResetDetector(windowMs, targetResets);
     }
