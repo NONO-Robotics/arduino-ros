@@ -12,7 +12,7 @@ class FWAngularSpeedWriter {
 private:
   float r;
   float k;
-  FWAngularSpeed *speed;
+  FourWheelAngularSpeed *speed;
 
 public:
   /**
