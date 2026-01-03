@@ -1,31 +1,30 @@
 #include <RosNodeManager.h>
 
-RosNodeManager::RosNodeManager(
-    String nodeName,
-    bool wifiEnergySavingMode,
-    wifi_power_t wifi_power,
-    bool syncTime)
-{
+RosNodeManager::RosNodeManager(String nodeName, bool wifiEnergySavingMode,
+                               wifi_power_t wifi_power, bool syncTime,
+                               int checkAgentConnectionIntervalMs,
+                               int agentRequestTimeoutMs) {
   this->nodeName = nodeName;
   this->wifiEnergySavingMode = wifiEnergySavingMode;
   this->wifi_power = wifi_power;
   this->syncTime = syncTime;
-  wifiConnectionManager = new WifiConnectionManager(
-      nodeName,
-      wifiEnergySavingMode,
-      wifi_power);
+
+  wifiConnectionManager =
+      new WifiConnectionManager(nodeName, wifiEnergySavingMode, wifi_power);
+
+  this->agentRequestTimeoutMs = agentRequestTimeoutMs;
+  checkAgentConnection = new DeltaTimeComputer(checkAgentConnectionIntervalMs);
+  checkAgentConnection->reset();
 }
 
-RosNodeManager *RosNodeManager::setup()
-{
+RosNodeManager *RosNodeManager::setup() {
   wifiResetDetector.setup();
 
   // 1. Initialize Wi-Fi and Synchronize Time
   logger.info("Wait for wifi connection...");
   this->wifiConnectionManager->connect();
 
-  if (syncTime)
-  {
+  if (syncTime) {
     syncClockTimeStamp(AR_UTC_TIME_OFFSET_IN_SECONDS);
   }
 
@@ -57,21 +56,33 @@ rcl_allocator_t *RosNodeManager::getAllocator() { return &allocator; }
 
 rclc_executor_t *RosNodeManager::getExecutor() { return &executor; }
 
-bool RosNodeManager::update(const uint64_t timeout_ns)
-{
+bool RosNodeManager::update(const uint64_t timeout_ns) {
+  checkAgentConnection->update();
   wifiResetDetector.update();
+
+  if (checkAgentConnection->hasBeenReached()) {
+    if (!this->isConnected(agentRequestTimeoutMs))
+      this->reset();
+
+    checkAgentConnection->reset();
+  }
+
+  // Process incoming ROS messages and call callbacks
+  if (!this->update()) {
+    this->reset();
+  }
+
   return assertOk(rclc_executor_spin_some(&executor, timeout_ns),
                   "Cant't Node Manager state");
 }
 
-bool RosNodeManager::isConnected(const int timeout_ms, const uint8_t attempts)
-{
+bool RosNodeManager::isConnected(const int timeout_ms, const uint8_t attempts) {
   return rmw_uros_ping_agent(timeout_ms, attempts) == RMW_RET_OK;
 }
 
-void RosNodeManager::reset()
-{
-    wifiResetDetector.reset();
-    logger.info("Restart ROS Node...");
-    ESP.restart();
+void RosNodeManager::reset() {
+  wifiResetDetector.reset();
+  logger.error("Connection to Micro-ROS Agent Lost!");
+  logger.info("Restart ROS Node...");
+  ESP.restart();
 }

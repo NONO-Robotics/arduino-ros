@@ -16,11 +16,7 @@
 #include "NavSatFixMsgWriter.h"
 #include "RosMessage.h"
 #include "RosNodeManager.h"
-#include "RosNodeManagerRestartHandler.h"
 #include "RosTwistSubscriber.h"
 #include "RosUtils.h"
 #include "StringPublisher.h"
 #include <WifiResetDetector.h>
-
-
-
