@@ -11,8 +11,6 @@ private:
   const int timeout_ms;
   DeltaTimeComputer *checkConnection;
 
-  void restart();
-
 public:
   /**
    * @brief Constructor.

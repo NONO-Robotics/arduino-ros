@@ -54,4 +54,6 @@ public:
     rcl_allocator_t *getAllocator();
 
     rclc_executor_t *getExecutor();
+
+    void reset();
 };

@@ -27,4 +27,9 @@ public:
     {
         mrd->process();
     }
+
+    void reset()
+    {
+        mrd->stop();
+    }
 };

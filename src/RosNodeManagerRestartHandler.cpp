@@ -10,20 +10,14 @@ RosNodeManagerRestartHandler::RosNodeManagerRestartHandler(
     checkConnection->reset();
 }
 
-void RosNodeManagerRestartHandler::restart()
-{
-    logger.error("Connection to Micro-ROS Agent Lost!");
-    logger.info("Restart Device...");
-    ESP.restart();
-}
-
 void RosNodeManagerRestartHandler::update()
 {
     if (checkConnection->hasBeenReached())
     {
         if (!nodeManager->isConnected(timeout_ms))
         {
-            restart();
+            logger.error("Connection to Micro-ROS Agent Lost!");
+            nodeManager->reset();
         }
         checkConnection->reset();
     }
@@ -32,6 +26,7 @@ void RosNodeManagerRestartHandler::update()
     // Process incoming ROS messages and call callbacks
     if (!nodeManager->update())
     {
-        restart();
+        logger.error("Connection to Micro-ROS Agent Lost!");
+        nodeManager->reset();
     }
 }
