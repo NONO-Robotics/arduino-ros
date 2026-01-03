@@ -30,6 +30,8 @@ private:
   DeltaTimeComputer *checkAgentConnection;
   int agentRequestTimeoutMs;
 
+  void restart();
+
 public:
   /**
    * @brief Constructor for RosNodeManager.
@@ -55,6 +57,4 @@ public:
   rcl_allocator_t *getAllocator();
 
   rclc_executor_t *getExecutor();
-
-  void reset();
 };

@@ -62,14 +62,14 @@ bool RosNodeManager::update(const uint64_t timeout_ns) {
 
   if (checkAgentConnection->hasBeenReached()) {
     if (!this->isConnected(agentRequestTimeoutMs))
-      this->reset();
+      this->restart();
 
     checkAgentConnection->reset();
   }
 
   // Process incoming ROS messages and call callbacks
   if (!this->update()) {
-    this->reset();
+    this->restart();
   }
 
   return assertOk(rclc_executor_spin_some(&executor, timeout_ns),
@@ -80,8 +80,7 @@ bool RosNodeManager::isConnected(const int timeout_ms, const uint8_t attempts) {
   return rmw_uros_ping_agent(timeout_ms, attempts) == RMW_RET_OK;
 }
 
-void RosNodeManager::reset() {
-  wifiResetDetector.reset();
+void RosNodeManager::restart() {
   logger.error("Connection to Micro-ROS Agent Lost!");
   logger.info("Restart ROS Node...");
   ESP.restart();
