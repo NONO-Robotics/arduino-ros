@@ -5,7 +5,7 @@ FloatPublisher::FloatPublisher(MicroRosPublisher *publisher) {
   msg = createFloatMessage();
 }
 
-void FloatPublisher::publish(int value) {
+void FloatPublisher::publish(float value) {
   msg->data = value;
   publisher->publish(msg);
 }

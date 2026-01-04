@@ -1,6 +1,6 @@
 #pragma once
-#include "RosMessage.h"
 #include "MicroRosPublisher.h"
+#include "RosMessage.h"
 
 /**
  * IntPublisher class for publishing integer values using micro-ROS.
@@ -10,19 +10,19 @@
  */
 class IntPublisher {
 public:
-    /**
-     * Constructor for IntPublisher.
-     * @param publisher Pointer to the MicroRosPublisher object
-     */
-    IntPublisher(MicroRosPublisher* publisher);
+  /**
+   * @brief Constructor for IntPublisher.
+   * @param publisher Pointer to the MicroRosPublisher object.
+   */
+  IntPublisher(MicroRosPublisher *publisher);
 
-    /**
-     * Publish the integer value.
-     * @param value Integer value to be published.
-     */
-    void publish(int value);
+  /**
+   * @brief Publish the integer value.
+   * @param value Integer value to be published.
+   */
+  void publish(int value);
 
 private:
-    MicroRosPublisher *publisher;
-    std_msgs__msg__Int32 *msg;
+  MicroRosPublisher *publisher;
+  std_msgs__msg__Int32 *msg;
 };

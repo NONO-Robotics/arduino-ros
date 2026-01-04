@@ -1,6 +1,6 @@
 #pragma once
-#include "RosMessage.h"
 #include "MicroRosPublisher.h"
+#include "RosMessage.h"
 
 /**
  * FloatPublisher class for publishing float values using micro-ROS.
@@ -10,19 +10,19 @@
  */
 class FloatPublisher {
 public:
-    /**
-     * Constructor for FloatPublisher.
-     * @param publisher Pointer to the MicroRosPublisher object
-     */
-    FloatPublisher(MicroRosPublisher* publisher);
+  /**
+   * @brief Constructor for FloatPublisher.
+   * @param publisher Pointer to the MicroRosPublisher object.
+   */
+  FloatPublisher(MicroRosPublisher *publisher);
 
-    /**
-     * Publish the float value.
-     * @param value Float value to be published.
-     */
-    void publish(int value);
+  /**
+   * @brief Publish the float value.
+   * @param value Float value to be published.
+   */
+  void publish(float value);
 
 private:
-    MicroRosPublisher *publisher;
-    std_msgs__msg__Float32 *msg;
+  MicroRosPublisher *publisher;
+  std_msgs__msg__Float32 *msg;
 };

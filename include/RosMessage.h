@@ -12,19 +12,19 @@
 
 /**
  * @brief Create a Float32 message.
- * @return Pointer to the created Float32 message.
+ * @return Pointer to the created std_msgs__msg__Float32 message.
  */
 std_msgs__msg__Float32 *createFloatMessage();
 
 /**
  * @brief Create an Int32 message.
- * @return Pointer to the created Int32 message.
+ * @return Pointer to the created std_msgs__msg__Int32 message.
  */
 std_msgs__msg__Int32 *createIntMessage();
 
 /**
  * @brief Create a Float32MultiArray message.
  * @param length Length of the array.
- * @return Pointer to the created Float32MultiArray message.
+ * @return Pointer to the created std_msgs__msg__Float32MultiArray message.
  */
 std_msgs__msg__Float32MultiArray *createFloatArrayMessage(size_t length);

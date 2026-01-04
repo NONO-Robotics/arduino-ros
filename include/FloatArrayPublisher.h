@@ -1,6 +1,6 @@
 #pragma once
-#include "RosMessage.h"
 #include "MicroRosPublisher.h"
+#include "RosMessage.h"
 
 /**
  * FloatArrayPublisher class for publishing float arrays using micro-ROS.
@@ -10,23 +10,23 @@
  */
 class FloatArrayPublisher {
 public:
-    /**
-     * Constructor for FloatArrayPublisher.
-     * @param publisher Pointer to the MicroRosPublisher object
-     * @param length Length of the float array
-     */
-    FloatArrayPublisher(MicroRosPublisher* publisher, size_t length);
+  /**
+   * @brief Constructor for FloatArrayPublisher.
+   * @param publisher Pointer to the MicroRosPublisher object.
+   * @param length Length of the float array to be published.
+   */
+  FloatArrayPublisher(MicroRosPublisher *publisher, size_t length);
 
-    ~FloatArrayPublisher();
+  ~FloatArrayPublisher();
 
-    /** 
-     * Publish the float array.
-     * @param data_array Pointer to the float array to be published.
-     */
-    void publish(float *data_array);
+  /**
+   * @brief Publish the float array.
+   * @param data_array Pointer to the float array to be published.
+   */
+  void publish(float *data_array);
 
 private:
-    MicroRosPublisher *publisher;
-    std_msgs__msg__Float32MultiArray *msg;
-    size_t length;
+  MicroRosPublisher *publisher;
+  std_msgs__msg__Float32MultiArray *msg;
+  size_t length;
 };

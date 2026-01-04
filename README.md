@@ -67,14 +67,15 @@ lib_deps =
 
 #### **`RosNodeManager`**
 Manages Wi-Fi connection, micro-ROS session initialization, and the node executor.
+Uses `WiFiManager` to handle Wi-Fi connection (captive portal) and Agent IP/Port configuration.
 
 *   **Include**: `#include "RosNodeManager.h"`
 *   **Constructor**:
     ```cpp
-    RosNodeManager(String nodeName, String wifi_ssid, String wifi_pass, String agent_ip, uint16_t agent_port = 8888, ...);
+    RosNodeManager(String nodeName, bool wifiEnergySavingMode = false, ...);
     ```
 *   **Key Methods**:
-    *   `setup()`: Connects to Wi-Fi and Agent.
+    *   `setup()`: Connects to Wi-Fi (opens captive portal if needed) and Agent.
     *   `update(timeout_ns)`: Processes callbacks. Call in `loop()`.
     *   `isConnected()`: Pings the agent.
 
@@ -105,7 +106,7 @@ Control logic for Brushless DC motors (PWM + Direction + Brake).
 
 #### **Publishers**
 Wrappers for standard messages.
-*   `StringPublisher`, `IntPublisher`, `FloatPublisher`, `FloatArrayPublisher`.
+*   `StringPublisher`, `IntPublisher`, `FloatPublisher` (takes `float`), `FloatArrayPublisher`.
 *   **`DifferentialRobotOdometryPublisher`**: Publishes odometry data.
 
 #### **`RosTwistSubscriber`**
@@ -119,11 +120,6 @@ Specialized subscriber for `geometry_msgs/msg/Twist` (velocity commands).
 ```cpp
 #include <Arduino.h>
 #include "ArduinoRos.h"
-
-// Configuration
-#define WIFI_SSID "MY_WIFI"
-#define WIFI_PASS "SECRET"
-#define AGENT_IP "192.168.1.50"
 
 RosNodeManager *nodeManager;
 RosTwistSubscriber *sub;
@@ -141,7 +137,9 @@ void setup() {
     motor->setup();
     conv = new WToSignedPWMConverter(10.0, 12, 100);
 
-    nodeManager = new RosNodeManager("bot_node", WIFI_SSID, WIFI_PASS, AGENT_IP);
+    // Node Name: "bot_node"
+    // Wi-Fi and Agent IP are configured via Captive Portal on first run.
+    nodeManager = new RosNodeManager("bot_node"); 
     nodeManager->setup();
 
     sub = new RosTwistSubscriber(nodeManager->getNode(), nodeManager->getExecutor(), "cmd_vel", onCmdVel);
