@@ -1,9 +1,13 @@
 #include "FWAngularSpeedWriter.h"
 
-FWAngularSpeedWriter::FWAngularSpeedWriter(float l, float w, float r, FourWheelAngularSpeed *speed) {
+FWAngularSpeedWriter::FWAngularSpeedWriter(
+  float l, 
+  float w, 
+  float r, 
+  FourWheelAngularSpeed *angularSpeed) {
   this->r = r;
   this->k = l + w;
-  this->speed = speed;
+  this->angularSpeed = angularSpeed;
 }
 
 void FWAngularSpeedWriter::write(
@@ -18,5 +22,9 @@ void FWAngularSpeedWriter::write(
   float bl = (1.0f / r) * (vx + vy - k * wz);
   float br = (1.0f / r) * (vx - vy + k * wz);
 
-  speed->updateFrom(fl, fr, bl, br);
+  angularSpeed->updateFrom(fl, fr, bl, br);
+}
+
+FourWheelAngularSpeed& FWAngularSpeedWriter::getAngularSpeed() const {
+  return *angularSpeed;
 }

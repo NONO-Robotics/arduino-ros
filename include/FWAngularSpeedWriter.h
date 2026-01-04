@@ -12,7 +12,7 @@ class FWAngularSpeedWriter {
 private:
   float r;
   float k;
-  FourWheelAngularSpeed *speed;
+  FourWheelAngularSpeed *angularSpeed;
 
 public:
   /**
@@ -21,7 +21,7 @@ public:
    * @param w Distance between the left and right wheels
    * @param r Wheel radius
    */
-  FWAngularSpeedWriter(float l, float w, float r, FourWheelAngularSpeed *speed);
+  FWAngularSpeedWriter(float l, float w, float r, FourWheelAngularSpeed *angularSpeed);
 
   /**
    * Convert robot movement data to wheel speeds.
@@ -30,4 +30,8 @@ public:
    * wheel speeds
    */
   void write(geometry_msgs__msg__Twist *twist);
+
+  FourWheelAngularSpeed& getAngularSpeed() const {
+    return *angularSpeed;
+  }
 };
