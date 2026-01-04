@@ -31,7 +31,5 @@ public:
    */
   void write(geometry_msgs__msg__Twist *twist);
 
-  FourWheelAngularSpeed& getAngularSpeed() const {
-    return *angularSpeed;
-  }
+  FourWheelAngularSpeed& getAngularSpeed() const;
 };
