@@ -67,11 +67,6 @@ bool RosNodeManager::update(const uint64_t timeout_ns) {
     checkAgentConnection->reset();
   }
 
-  // Process incoming ROS messages and call callbacks
-  if (!this->update()) {
-    this->restart();
-  }
-
   return assertOk(rclc_executor_spin_some(&executor, timeout_ns),
                   "Cant't Node Manager state");
 }
