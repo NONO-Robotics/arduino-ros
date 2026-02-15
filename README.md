@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/adrianmarino/4w-ros-robot/blob/main/images/robot-v4.png" alt="Arduino ROS Robot Logo"/>
+  <img src="https://github.com/adrianmarino/4w-ros-robot/blob/main/images/indoor-preview2.jpg" alt="Arduino ROS Robot Logo"/>
   
   # Arduino-ROS Library
 
