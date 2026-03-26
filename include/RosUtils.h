@@ -8,9 +8,14 @@
 #include <rclc/rclc.h>
 #include <rosidl_runtime_c/string_functions.h>
 
+#ifdef USE_WIFI_TRANSPORT
+#include <WiFi.h>
 const wifi_power_t WIFI_POWER_20_5dBm = (wifi_power_t)82; // 20.5 dBm * 4 = 82
+#endif
 
 bool assertOk(rcl_ret_t result, String msg);
+
+#ifdef USE_WIFI_TRANSPORT
 
 /**
  * @brief Connect to the micro-ROS agent via Wi-Fi.
@@ -31,3 +36,4 @@ void connect_to_agent_via_wifi(String hostname, String wifi_ssid,
                                String wifi_pass, String agent_ip,
                                uint16_t agent_port, bool energySavingMode,
                                wifi_power_t wifi_power);
+#endif

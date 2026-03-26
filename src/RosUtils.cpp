@@ -10,6 +10,7 @@ bool assertOk(rcl_ret_t result, String msg) {
   }
 }
 
+#ifdef USE_WIFI_TRANSPORT
 void connect_to_agent_via_wifi(String hostname, String wifi_ssid,
                                String wifi_pass, String agent_ip,
                                uint16_t agent_port, bool energySavingMode,
@@ -43,3 +44,4 @@ void connect_to_agent_via_wifi(String hostname, String wifi_ssid,
 
   logger.info("Wifi connection stablished...");
 }
+#endif

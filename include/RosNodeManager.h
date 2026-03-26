@@ -1,10 +1,13 @@
 #pragma once
+#include <micro_ros_platformio.h>
+#ifdef USE_WIFI_TRANSPORT
 #include "WifiConnectionManager.h"
+#include <WifiResetDetector.h>
+#endif
 #include <DeltaTimeComputer.h>
 #include <Logger.h>
 #include <RosUtils.h>
 #include <StringUtils.h>
-#include <WifiResetDetector.h>
 #include <rclc/executor.h>
 #include <timestamp.h>
 
@@ -22,11 +25,13 @@ private:
   rcl_allocator_t allocator = rcl_get_default_allocator();
   rcl_node_t node;
   rclc_executor_t executor;
+#ifdef USE_WIFI_TRANSPORT
   bool wifiEnergySavingMode;
   wifi_power_t wifi_power;
-  bool syncTime;
   WifiConnectionManager *wifiConnectionManager;
   WifiResetDetector wifiResetDetector;
+#endif
+  bool syncTime;
   DeltaTimeComputer *checkAgentConnection;
   int agentRequestTimeoutMs;
 
@@ -43,8 +48,11 @@ public:
    * @param checkAgentConnectionIntervalMs (Optional) Interval in milliseconds to check agent connection. Default is 10000ms.
    * @param agentRequestTimeoutMs (Optional) Timeout in milliseconds for agent requests. Default is 5000ms.
    */
-  RosNodeManager(String nodeName, bool wifiEnergySavingMode = false,
+  RosNodeManager(String nodeName, 
+#ifdef USE_WIFI_TRANSPORT
+                 bool wifiEnergySavingMode = false,
                  wifi_power_t wifi_power = WIFI_POWER_20_5dBm,
+#endif
                  bool syncTime = true,
                  const int checkAgentConnectionIntervalMs = 10000,
                  const int agentRequestTimeoutMs = 5000);

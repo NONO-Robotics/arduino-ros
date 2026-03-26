@@ -1,5 +1,6 @@
 #pragma once
 
+#ifdef USE_WIFI_TRANSPORT
 #include "Logger.h"
 #include "RosUtils.h"
 #include <ConfigStorage.h>
@@ -65,3 +66,4 @@ public:
    */
   void rosTransportSetup();
 };
+#endif

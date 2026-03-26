@@ -1,5 +1,6 @@
 #include "WifiConnectionManager.h"
 
+#ifdef USE_WIFI_TRANSPORT
 WifiConnectionManager::WifiConnectionManager(
     String hostname,
     bool energySavingMode,
@@ -115,3 +116,4 @@ bool WifiConnectionManager::foundPreviouslySavedAgentInfo()
 {
     return storage->has(AGENT_IP_KEY) && storage->has(AGENT_PORT_KEY);
 }
+#endif

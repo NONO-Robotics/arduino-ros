@@ -1,39 +1,43 @@
 #include <RosNodeManager.h>
 
-RosNodeManager::RosNodeManager(String nodeName, bool wifiEnergySavingMode,
-                               wifi_power_t wifi_power, bool syncTime,
+RosNodeManager::RosNodeManager(String nodeName, 
+#ifdef USE_WIFI_TRANSPORT
+                               bool wifiEnergySavingMode,
+                               wifi_power_t wifi_power,
+#endif
+                               bool syncTime,
                                int checkAgentConnectionIntervalMs,
                                int agentRequestTimeoutMs) {
   this->nodeName = nodeName;
+#ifdef USE_WIFI_TRANSPORT
   this->wifiEnergySavingMode = wifiEnergySavingMode;
   this->wifi_power = wifi_power;
-  this->syncTime = syncTime;
 
   wifiConnectionManager =
       new WifiConnectionManager(nodeName, wifiEnergySavingMode, wifi_power);
-
+#endif
+  this->syncTime = syncTime;
   this->agentRequestTimeoutMs = agentRequestTimeoutMs;
   checkAgentConnection = new DeltaTimeComputer(checkAgentConnectionIntervalMs);
   checkAgentConnection->reset();
 }
 
 RosNodeManager *RosNodeManager::setup() {
+#ifdef USE_WIFI_TRANSPORT
   wifiResetDetector.setup();
-
-  // 1. Initialize Wi-Fi and Synchronize Time
   logger.info("Wait for wifi connection...");
   this->wifiConnectionManager->connect();
-
   if (syncTime) {
     syncClockTimeStamp(AR_UTC_TIME_OFFSET_IN_SECONDS);
   }
+#elif defined(USE_SERIAL_TRANSPORT)
+  Serial.begin(115200);
+  set_microros_serial_transports(Serial);
+#endif
 
-  // 2. Initialize Micro-ROS Support
-  // Create init_options
   assertOk(rclc_support_init(&support, 0, NULL, &allocator),
            "Can't create support for node: " + nodeName);
 
-  // 3. Create Node and Executor
   char *charNodeName = toCharArray(nodeName);
 
   assertOk(rclc_node_init_default(&node, charNodeName, "", &support),
@@ -58,7 +62,9 @@ rclc_executor_t *RosNodeManager::getExecutor() { return &executor; }
 
 bool RosNodeManager::update(const uint64_t timeout_ns) {
   checkAgentConnection->update();
+#ifdef USE_WIFI_TRANSPORT
   wifiResetDetector.update();
+#endif
 
   if (checkAgentConnection->hasBeenReached()) {
     if (!this->isConnected(agentRequestTimeoutMs))
