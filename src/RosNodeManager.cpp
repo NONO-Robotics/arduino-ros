@@ -56,7 +56,7 @@ RosNodeManager *RosNodeManager::setup()
       {
         Serial.read();
       }
-      delay(500);
+      delay(1000);
     }
   }
   delay(1000); // Pequeño margen para que el agente estabilice su estado
