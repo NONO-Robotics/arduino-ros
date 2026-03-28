@@ -53,7 +53,7 @@ void WifiConnectionManager::connect()
 
     if (!res || WiFi.status() != WL_CONNECTED)
     {
-        Serial.println("Failed to connect or hit timeout");
+        logger.error("Failed to connect or hit timeout");
         ESP.restart();
     }
 

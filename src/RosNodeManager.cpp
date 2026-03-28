@@ -31,11 +31,13 @@ RosNodeManager *RosNodeManager::setup() {
     syncClockTimeStamp(AR_UTC_TIME_OFFSET_IN_SECONDS);
   }
 #elif defined(USE_SERIAL_TRANSPORT)
+  delay(2000); // Dar tiempo al hardware para estabilizar la conexión serie
   set_microros_serial_transports(Serial);
 
   logger.info("Wait for micro-ROS agent (Serial)...");
-  while (rmw_uros_ping_agent(100, 1) != RMW_RET_OK) {
-    delay(100);
+  // Aumentamos el timeout a 1000ms para asegurar la primera conexión
+  while (rmw_uros_ping_agent(1000, 1) != RMW_RET_OK) {
+    delay(500);
   }
   delay(500);
 #endif
