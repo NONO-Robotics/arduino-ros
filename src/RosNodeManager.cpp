@@ -31,13 +31,13 @@ RosNodeManager *RosNodeManager::setup() {
     syncClockTimeStamp(AR_UTC_TIME_OFFSET_IN_SECONDS);
   }
 #elif defined(USE_SERIAL_TRANSPORT)
-  Serial.begin(115200);
   set_microros_serial_transports(Serial);
 
   logger.info("Wait for micro-ROS agent (Serial)...");
-  while (!this->isConnected(500, 1)) {
-    delay(500);
+  while (rmw_uros_ping_agent(100, 1) != RMW_RET_OK) {
+    delay(100);
   }
+  delay(500);
 #endif
 
   assertOk(rclc_support_init(&support, 0, NULL, &allocator),
