@@ -84,7 +84,7 @@ RosNodeManager *RosNodeManager::setup()
 
   delete charNodeName;
 
-  rcl_ret_t exec_ret = rclc_executor_init(&executor, &support.context, 1, &allocator);
+  rcl_ret_t exec_ret = rclc_executor_init(&executor, &support.context, 10, &allocator);
   if (exec_ret != RCL_RET_OK)
   {
     logger.error("Error al crear executor. Reiniciando ESP32...");
