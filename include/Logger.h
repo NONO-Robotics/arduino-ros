@@ -1,9 +1,8 @@
 #pragma once
 #include <Arduino.h>
 
-#ifdef USE_ROS_LOGGER
-#include <StringPublisher.h>
-#endif
+// Forward declarations to break circular dependencies
+class StringPublisher;
 
 enum LogLevel { TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF };
 
@@ -48,7 +47,12 @@ public:
     void fatal(String msg);
 
 #ifdef USE_ROS_LOGGER
-    void initRosPublisher(rcl_node_t* node, rclc_support_t* support);
+    /**
+     * @brief Initialize ROS publisher for logging.
+     * @param node Pointer to rcl_node_t (passed as void* to avoid header dependency)
+     * @param support Pointer to rclc_support_t (passed as void* to avoid header dependency)
+     */
+    void initRosPublisher(void* node, void* support);
 #endif
 
 private:

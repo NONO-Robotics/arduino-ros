@@ -96,14 +96,18 @@ bool Logger::isOff()   { return level == OFF;   }
 
 // ── Init ROS publisher ────────────────────────────────────────────────────────
 #ifdef USE_ROS_LOGGER
-#include <MicroRosPublisher.h>
+#include "StringPublisher.h"
+#include "MicroRosPublisher.h"
+#include <rcl/rcl.h>
 
-void Logger::initRosPublisher(rcl_node_t* node, rclc_support_t* support)
+void Logger::initRosPublisher(void* node, void* support)
 {
     if (ros_log_publisher) return;
 
+    rcl_node_t* rcl_node = (rcl_node_t*)node;
+
     ros_log_publisher = new StringPublisher(
-        MicroRosPublisher::createString(node, "/microrosout")
+        MicroRosPublisher::createString(rcl_node, "/microrosout")
     );
 }
 #endif
