@@ -1,5 +1,11 @@
 #include "Logger.h"
 
+#ifdef USE_ROS_LOGGER
+#include "StringPublisher.h"
+#include "MicroRosPublisher.h"
+#include <rcl/rcl.h>
+#endif
+
 // ── Instancia global — constructor vacío, sin efectos secundarios ─────────────
 Logger logger;
 
@@ -96,10 +102,6 @@ bool Logger::isOff()   { return level == OFF;   }
 
 // ── Init ROS publisher ────────────────────────────────────────────────────────
 #ifdef USE_ROS_LOGGER
-#include "StringPublisher.h"
-#include "MicroRosPublisher.h"
-#include <rcl/rcl.h>
-
 void Logger::initRosPublisher(void* node, void* support)
 {
     if (ros_log_publisher) return;
