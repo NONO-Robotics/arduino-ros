@@ -3,7 +3,6 @@
  * @brief Helper functions to create ROS messages.
  */
 #pragma once
-#include "Logger.h"
 #include "RosUtils.h"
 #include <std_msgs/msg/float32.h>
 #include <std_msgs/msg/float32_multi_array.h>

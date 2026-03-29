@@ -1,4 +1,5 @@
 #include "RosMessage.h"
+#include "Logger.h"
 
 std_msgs__msg__Float32 *createFloatMessage()
 {
