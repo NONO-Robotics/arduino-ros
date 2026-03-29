@@ -20,3 +20,4 @@
 #include "RosUtils.h"
 #include "StringPublisher.h"
 #include <WifiResetDetector.h>
+#include "Logger.h"
