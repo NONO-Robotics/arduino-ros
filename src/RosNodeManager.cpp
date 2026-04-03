@@ -38,8 +38,6 @@ RosNodeManager *RosNodeManager::setup()
   Serial.begin(115200); Serial.flush();
   set_microros_serial_transports(Serial);
 
-  logger.info("Wait for micro-ROS agent (Serial)...");
-
   // Aumentamos el timeout a 1000ms para asegurar la primera conexión
   while (rmw_uros_ping_agent(1000, 1) != RMW_RET_OK) {
     delay(600);
