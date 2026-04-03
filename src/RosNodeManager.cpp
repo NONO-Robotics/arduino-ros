@@ -77,6 +77,8 @@ RosNodeManager *RosNodeManager::setup()
     ESP.restart();
   }
 
+  this->syncClock();
+
   logger.info("Connected to Ros2 Agent and Entities Created Successfully");
   return this;
 }
@@ -118,4 +120,22 @@ void RosNodeManager::restart()
   logger.error("Connection to Micro-ROS Agent Lost!");
   logger.info("Restart ROS Node...");
   ESP.restart();
+}
+
+void RosNodeManager::syncClock()
+{
+  // 1. Intentar sincronizar el reloj con la Mini PC (Agente)
+  // Esto solicita el tiempo real del sistema de la Mini PC vía USB
+  const int timeout_ms = 1000;
+  rmw_uros_sync_session(timeout_ms);
+
+  if (rmw_uros_epoch_synchronized()) {
+      // Si se sincronizó, obtenemos el tiempo y lo imprimimos para debug
+      int64_t time_ms = rmw_uros_epoch_millis();
+      Serial.print("Reloj sincronizado! Tiempo actual: ");
+      Serial.println(time_ms);
+  } else {
+      Serial.println("Error: No se pudo sincronizar el reloj con la Mini PC.");
+      // Podrías decidir no avanzar si la sincronización falla
+  }
 }

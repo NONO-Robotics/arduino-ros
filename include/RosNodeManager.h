@@ -115,4 +115,6 @@ public:
    * @return Pointer to the rclc_executor_t structure.
    */
   rclc_executor_t *getExecutor();
+
+  void syncClock();
 };
