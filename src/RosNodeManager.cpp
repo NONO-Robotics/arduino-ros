@@ -126,16 +126,16 @@ void RosNodeManager::syncClock()
 {
   // 1. Intentar sincronizar el reloj con la Mini PC (Agente)
   // Esto solicita el tiempo real del sistema de la Mini PC vía USB
-  const int timeout_ms = 1000;
+  const int timeout_ms = 3000;
   rmw_uros_sync_session(timeout_ms);
 
   if (rmw_uros_epoch_synchronized()) {
       // Si se sincronizó, obtenemos el tiempo y lo imprimimos para debug
       int64_t time_ms = rmw_uros_epoch_millis();
-      Serial.print("Reloj sincronizado! Tiempo actual: ");
-      Serial.println(time_ms);
+      logger.info("Reloj sincronizado! Tiempo actual: ");
+      logger.info(time_ms);
   } else {
-      Serial.println("Error: No se pudo sincronizar el reloj con la Mini PC.");
-      // Podrías decidir no avanzar si la sincronización falla
+      logger.error("Error: No se pudo sincronizar el reloj con la Mini PC.");
+      ESP.restart();
   }
 }
