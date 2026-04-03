@@ -7,7 +7,7 @@ RosNodeManager::RosNodeManager(String nodeName,
 #endif
                                bool syncTime,
                                int checkAgentConnectionIntervalMs,
-                               int agentRequestTimeoutMs)
+                               int agentRequestTimeoutMs, long baudRate)
 {
   this->nodeName = nodeName;
 #ifdef USE_WIFI_TRANSPORT
@@ -19,6 +19,7 @@ RosNodeManager::RosNodeManager(String nodeName,
 #endif
   this->syncTime = syncTime;
   this->agentRequestTimeoutMs = agentRequestTimeoutMs;
+  this->baudRate = baudRate;
   checkAgentConnection = new DeltaTimeComputer(checkAgentConnectionIntervalMs);
   checkAgentConnection->reset();
 }
@@ -35,7 +36,7 @@ RosNodeManager *RosNodeManager::setup()
 #elif defined(USE_SERIAL_TRANSPORT)
   delay(2000); // Dar tiempo al hardware para estabilizar la alimentación
 
-  Serial.begin(115200); Serial.flush();
+  Serial.begin(this->baudRate); Serial.flush();
   set_microros_serial_transports(Serial);
 
   // Aumentamos el timeout a 1000ms para asegurar la primera conexión
