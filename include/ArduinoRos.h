@@ -21,3 +21,5 @@
 #include "StringPublisher.h"
 #include <WifiResetDetector.h>
 #include "Logger.h"
+#include "MicroRosTimeUtils.h"
+#include "Vector3StampedPublisher.h"

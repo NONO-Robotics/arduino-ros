@@ -1,17 +1,22 @@
 #include "DifferentialRobotOdometryPublisher.h"
 
-DifferentialRobotOdometryPublisher::DifferentialRobotOdometryPublisher(rcl_node_t *node, String topic_name)
+DifferentialRobotOdometryPublisher::DifferentialRobotOdometryPublisher(
+    rcl_node_t *node, 
+    String topic_name,
+    String frameId)
 {
-    publisher = new FloatArrayPublisher(MicroRosPublisher::createFloatArray(node, topic_name), 2);
+    publisher = new Vector3StampedPublisher(
+        MicroRosPublisher::createVector3Stamped(node, topic_name),
+       frameId
+    );
+}
+
+DifferentialRobotOdometryPublisher::~DifferentialRobotOdometryPublisher()
+{
+    if (publisher) delete publisher;
 }
 
 void DifferentialRobotOdometryPublisher::publish(const DifferentialRobotOdometry &data)
 {
-    float w_data[] = {data.getLeftWInRad(), data.getRightWInRad()};
-
-    publisher->publish(w_data);
-}
-
-DifferentialRobotOdometryPublisher::~DifferentialRobotOdometryPublisher() {
-    delete publisher;
+    if (publisher) publisher->publish(data.getLeftWInRad(), data.getRightWInRad());
 }

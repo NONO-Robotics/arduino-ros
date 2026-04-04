@@ -42,6 +42,20 @@ MicroRosPublisher *MicroRosPublisher::createFloatArray(
       reliable);
 };
 
+MicroRosPublisher *MicroRosPublisher::createVector3Stamped(
+    rcl_node_t *node,
+    String topic_name,
+    int delayMillis,
+    bool reliable)
+{
+  return new MicroRosPublisher(
+      node,
+      topic_name,
+      ROSIDL_GET_MSG_TYPE_SUPPORT(geometry_msgs, msg, Vector3Stamped),
+      delayMillis,
+      reliable);
+}
+
 MicroRosPublisher *MicroRosPublisher::createString(
     rcl_node_t *node,
     String topic_name,

@@ -1,10 +1,8 @@
 #include "IMUPublisher.h"
 
-
 // Buffer estático para el frame_id. Esta es la clave.
 // Su memoria persiste durante toda la vida del programa.
 static char frame_id_buffer[50];
-
 
 IMUPublisher::IMUPublisher(
     rcl_node_t* node, 
@@ -46,19 +44,11 @@ IMUPublisher::IMUPublisher(
 
 void IMUPublisher::publish(IMUData* data)
 {
-    msgWriter->write(data);
+    MicroRosTimeUtils::setCurrentStamp(&msg.header);
 
-    this->prepareMsg();
+    msgWriter->write(data);
 
     if(RCL_RET_ERROR == rcl_publish(&publisher, &msg, NULL)) {
         logger.error("Failed to publish IMU data.");
     }
-}
-
-void IMUPublisher::prepareMsg()
-{
-    struct timespec ts;
-    clock_gettime(CLOCK_REALTIME, &ts);
-    msg.header.stamp.sec = ts.tv_sec;
-    msg.header.stamp.nanosec = ts.tv_nsec;
 }

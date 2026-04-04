@@ -9,7 +9,8 @@
  * This class provides methods to create a publisher and publish messages
  * using the micro-ROS framework.
  */
-class MicroRosPublisher {
+class MicroRosPublisher
+{
 private:
   rcl_publisher_t publisher;
   int delayMillis;
@@ -46,6 +47,11 @@ public:
                                              String topic_name,
                                              int delayMillis = 0,
                                              bool reliable = true);
+
+  static MicroRosPublisher *createVector3Stamped(rcl_node_t *node,
+                                                 String topic_name,
+                                                 int delayMillis = 0,
+                                                 bool reliable = true);
 
   /**
    * @brief Create a publisher for string messages.

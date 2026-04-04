@@ -11,6 +11,7 @@
 #include "IMUMsgWriter.h"
 #include "Logger.h"
 #include "StringUtils.h"
+#include "MicroRosTimeUtils.h"
 
 /**
  * @brief IMUPublisher class for publishing IMU data.
@@ -20,8 +21,6 @@
  */
 class IMUPublisher {
 private:
-  void prepareMsg();
-
   rcl_publisher_t publisher;
   sensor_msgs__msg__Imu msg;
   rcl_node_t *node_ptr; // Store pointer for cleanup

@@ -44,8 +44,8 @@ RosNodeManager *RosNodeManager::setup()
     delay(600);
   }
 
-  delay(1000); // Pequeño margen para que el agente estabilice su estado
 #endif
+  delay(1000); // Pequeño margen para que el agente estabilice su estado
 
   // 3. Manejo de errores sin bloqueos definitivos
   // En lugar de usar assertOk (que asumo detiene el código), evaluamos el retorno.
@@ -53,8 +53,7 @@ RosNodeManager *RosNodeManager::setup()
   if (support_ret != RCL_RET_OK)
   {
     logger.error("Error al inicializar rclc_support. Reiniciando ESP32...");
-    delay(1000);
-    ESP.restart(); // Reiniciamos el ESP para limpiar estados de memoria y volver a empezar
+    this->restart();
   }
 
   char *charNodeName = toCharArray(nodeName);
@@ -63,8 +62,7 @@ RosNodeManager *RosNodeManager::setup()
   if (node_ret != RCL_RET_OK)
   {
     logger.error("Error al inicializar el nodo. Reiniciando ESP32...");
-    delay(1000);
-    ESP.restart();
+    this->restart();
   }
 
   delete[] charNodeName;
@@ -73,11 +71,14 @@ RosNodeManager *RosNodeManager::setup()
   if (exec_ret != RCL_RET_OK)
   {
     logger.error("Error al crear executor. Reiniciando ESP32...");
-    delay(1000);
-    ESP.restart();
+    this->restart();
   }
 
-  this->syncClock();
+  if (syncTime) {
+    if (!MicroRosTimeUtils::syncSession(5000)) {
+      this->restart();
+    }
+  }
 
   logger.info("Connected to Ros2 Agent and Entities Created Successfully");
   return this;
@@ -100,8 +101,10 @@ bool RosNodeManager::update(const uint64_t timeout_ns)
 
   if (checkAgentConnection->hasBeenReached())
   {
-    if (!this->isConnected(agentRequestTimeoutMs))
+    if (!this->isConnected(agentRequestTimeoutMs)) {
+      logger.error("Connection to Micro-ROS Agent Lost!");
       this->restart();
+    }
 
     checkAgentConnection->reset();
   }
@@ -117,25 +120,6 @@ bool RosNodeManager::isConnected(const int timeout_ms, const uint8_t attempts)
 
 void RosNodeManager::restart()
 {
-  logger.error("Connection to Micro-ROS Agent Lost!");
   logger.info("Restart ROS Node...");
   ESP.restart();
-}
-
-void RosNodeManager::syncClock()
-{
-  // 1. Intentar sincronizar el reloj con la Mini PC (Agente)
-  // Esto solicita el tiempo real del sistema de la Mini PC vía USB
-  const int timeout_ms = 3000;
-  rmw_uros_sync_session(timeout_ms);
-
-  if (rmw_uros_epoch_synchronized()) {
-      // Si se sincronizó, obtenemos el tiempo y lo imprimimos para debug
-      int64_t time_ms = rmw_uros_epoch_millis();
-      logger.info("Reloj sincronizado! Tiempo actual: ");
-      logger.info(time_ms);
-  } else {
-      logger.error("Error: No se pudo sincronizar el reloj con la Mini PC.");
-      ESP.restart();
-  }
 }

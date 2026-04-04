@@ -13,6 +13,7 @@
 const wifi_power_t WIFI_POWER_20_5dBm = (wifi_power_t)82; // 20.5 dBm * 4 = 82
 #endif
 
+
 bool assertOk(rcl_ret_t result, String msg);
 
 #ifdef USE_WIFI_TRANSPORT
