@@ -22,7 +22,8 @@ void MicroRosTimeUtils::setCurrentStamp(std_msgs__msg__Header* header) {
     if (!isSynchronized()) {
         // Intentamos resincronizar con un timeout corto (ej. 10 ms)
         // para no bloquear el control de motores del ESP32
-        rmw_uros_sync_session(10); 
+        rmw_uros_sync_session(100); // Timeout más largo: 100ms
+        delay(100);
     }
 
     // Volvemos a comprobar por si la línea anterior tuvo éxito
