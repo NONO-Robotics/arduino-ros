@@ -2,9 +2,7 @@
 #include "Logger.h"
 
 bool MicroRosTimeUtils::syncSession(int timeout_ms) {
-    rmw_uros_sync_session(timeout_ms);
-
-    if (MicroRosTimeUtils::isSynchronized()) {
+    if (rmw_uros_sync_session(timeout_ms)== RMW_RET_OK) {
         logger.info("Time syncronized");
         return true;
     } else {
@@ -13,30 +11,39 @@ bool MicroRosTimeUtils::syncSession(int timeout_ms) {
     }
 }
 
+bool MicroRosTimeUtils::syncSessionWithRetry(int timeout_ms, int attempts) {
+    bool synced = false;
+    int i;
+    for (i = 0; i < attempts; i++) {
+        if (rmw_uros_sync_session(timeout_ms) == RMW_RET_OK) {
+            synced = true;
+            logger.info("Time Sync successful. Attempts: " + String(i+1));
+            break;
+        }
+        delay(100);
+        logger.info(".");
+    }
+    if (synced) {
+        logger.info("Time Sync falled after " + String(i+1) + " attempts. Proceeding without time sync.");
+    }
+    return synced;
+}
+
 bool MicroRosTimeUtils::isSynchronized() {
     return rmw_uros_epoch_synchronized();
 }
 
 void MicroRosTimeUtils::setCurrentStamp(std_msgs__msg__Header* header) {
-    // Si perdimos la sincronización, intentamos recuperarla RÁPIDO
-    if (!isSynchronized()) {
-        // Intentamos resincronizar con un timeout corto (ej. 10 ms)
-        // para no bloquear el control de motores del ESP32
-        rmw_uros_sync_session(100); // Timeout más largo: 100ms
-        delay(100);
-    }
-
-    // Volvemos a comprobar por si la línea anterior tuvo éxito
     if (isSynchronized()) {
         int64_t time_ms = rmw_uros_epoch_millis();
         header->stamp.sec = (int32_t)(time_ms / 1000);
         header->stamp.nanosec = (uint32_t)((time_ms % 1000) * 1000000);
     } else {
-        // Si seguimos sin sincronización, usar el tiempo local de hardware
-        // (millis o micros) es marginalmente mejor que enviar 0 absoluto, 
-        // aunque ROS 2 igual podría quejarse hasta que se recupere la conexión.
-        int64_t local_time_ms = esp_timer_get_time() / 1000; 
-        header->stamp.sec = (int32_t)(local_time_ms / 1000);
-        header->stamp.nanosec = (uint32_t)((local_time_ms % 1000) * 1000000);
+        // IMPORTANTE: Si el monitor sigue dando 139s de delay, 
+        // significa que esta sección sigue ejecutándose.
+        // Mientras no haya sync, mejor enviar 0 para que Nav2 sepa que el dato no es válido.
+        header->stamp.sec = 0;
+        header->stamp.nanosec = 0;
     }
 }
+

@@ -75,9 +75,7 @@ RosNodeManager *RosNodeManager::setup()
   }
 
   if (syncTime) {
-    if (!MicroRosTimeUtils::syncSession(5000)) {
-      this->restart();
-    }
+    MicroRosTimeUtils::syncSessionWithRetry(500, 50);
   }
 
   logger.info("Connected to Ros2 Agent and Entities Created Successfully");
