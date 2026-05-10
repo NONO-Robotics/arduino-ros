@@ -15,14 +15,14 @@ enum LogOutput {
 class Logger {
 public:
     /**
-     * @brief Constructor vacío — no hace nada.
-     *        Llamar begin() en setup() para inicializar.
+     * @brief Empty constructor — does nothing.
+     *        Call begin() in setup() to initialize.
      */
     Logger() = default;
 
     /**
-     * @brief Inicializa el logger con el destino elegido.
-     *        Llamar en setup() antes de usar cualquier log.
+     * @brief Initializes the logger with the chosen destination.
+     *        Call in setup() before using any log.
      */
     void begin(unsigned long baud, LogLevel level = INFO, LogOutput output = OUTPUT_SERIAL);
 

@@ -131,7 +131,106 @@ Specialized subscriber for `geometry_msgs/msg/Twist` (velocity commands).
 
 ---
 
-## 🚀 Usage Example
+## 💡 Class Examples
+
+### 1. Basic Publishers (String, Int, Float)
+```cpp
+#include "ArduinoRos.h"
+
+StringPublisher *strPub;
+IntPublisher *intPub;
+
+void setup() {
+    // Assuming nodeManager is already set up...
+    strPub = new StringPublisher(MicroRosPublisher::createString(nodeManager->getNode(), "status_topic"));
+    intPub = new IntPublisher(MicroRosPublisher::createInt(nodeManager->getNode(), "battery_level"));
+}
+
+void loop() {
+    strPub->publish("Robot is running smoothly");
+    intPub->publish(85);
+    delay(1000);
+}
+```
+
+### 2. Sensor Publishers (IMU & GPS)
+```cpp
+#include "ArduinoRos.h"
+
+IMUPublisher *imuPub;
+GPSPublisher *gpsPub;
+
+void setup() {
+    imuPub = new IMUPublisher(nodeManager->getNode(), nodeManager->getAllocator(), "/imu/data", "imu_link");
+    gpsPub = new GPSPublisher(nodeManager->getNode(), nodeManager->getAllocator(), "/gps/fix", "gps_link");
+}
+
+void loop() {
+    IMUData imuData = { /* populate with sensor data */ };
+    imuPub->publish(&imuData);
+    
+    GPSData gpsData = { /* populate with sensor data */ };
+    gpsPub->publish(&gpsData);
+    delay(100);
+}
+```
+
+### 3. Differential Robot Odometry Publisher
+```cpp
+#include "ArduinoRos.h"
+
+DifferentialRobotOdometryPublisher *odomPub;
+
+void setup() {
+    odomPub = new DifferentialRobotOdometryPublisher(nodeManager->getNode(), "odom", "base_link");
+}
+
+void loop() {
+    DifferentialRobotOdometry odomData;
+    odomData.x = 1.5;
+    odomData.y = 2.0;
+    odomData.theta = 0.5;
+    odomPub->publish(odomData);
+    delay(50);
+}
+```
+
+### 4. Twist Subscriber
+```cpp
+#include "ArduinoRos.h"
+
+RosTwistSubscriber *twistSub;
+
+void onCmdVel(const void *msg) {
+    geometry_msgs__msg__Twist *twist = (geometry_msgs__msg__Twist *)msg;
+    // Use twist->linear.x and twist->angular.z to control the robot
+}
+
+void setup() {
+    twistSub = new RosTwistSubscriber(nodeManager->getNode(), nodeManager->getExecutor(), "cmd_vel", onCmdVel);
+}
+```
+
+### 5. Utilities (Logger & Time Sync)
+```cpp
+#include "ArduinoRos.h"
+
+void setup() {
+    logger.begin(115200, INFO, OUTPUT_SERIAL);
+    logger.info("Initializing node...");
+    
+    // Sync time with agent
+    if (MicroRosTimeUtils::syncSessionWithRetry(500, 10)) {
+        logger.info("Time synchronized!");
+    } else {
+        logger.warn("Time sync failed.");
+    }
+}
+```
+
+---
+
+## 🚀 Full Integration Example
 
 ```cpp
 #include <Arduino.h>
