@@ -18,6 +18,10 @@
  *
  * This class handles the initialization and publishing of IMU data
  * (accelerometer, gyroscope, orientation) to a ROS 2 topic using micro-ROS.
+ * 
+ * Usage Context: Employed in the dedicated sensor node (e.g. 4w-ros-robot-imu-gps)
+ * to broadcast real-time state data, which is typically consumed by 
+ * robot_localization packages (EKF/UKF) to fuse with odometry for robust navigation.
  */
 class IMUPublisher {
 private:

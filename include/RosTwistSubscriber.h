@@ -5,10 +5,13 @@
 #include <rclc/executor.h>
 
 /**
- * @brief Class for subscribing to Twist messages using micro-ROS.
+ * @brief Subscriber for velocity commands (`geometry_msgs/msg/Twist`).
  *
- * This class provides methods to create a subscriber and handle incoming
- * Twist messages using the micro-ROS framework.
+ * This class abstracts the subscription to a ROS 2 Twist topic (usually `cmd_vel`).
+ * 
+ * Usage Context: Primarily used in the robot's movement nodes to receive
+ * teleoperation commands or autonomous navigation (Nav2) velocity commands,
+ * which are then translated into wheel speeds by the traction controllers.
  */
 class RosTwistSubscriber {
 

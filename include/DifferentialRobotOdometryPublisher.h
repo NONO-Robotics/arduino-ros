@@ -8,6 +8,10 @@
  *
  * This class wraps a Vector3StampedPublisher to publish odometry
  * data (x, y, theta) calculated from a differential drive robot.
+ * 
+ * Usage Context: Used by the wheel-publisher firmware to send computed 
+ * odometry up to the ROS 2 environment, providing the necessary data 
+ * for the robot's tf tree and localization algorithms.
  */
 class DifferentialRobotOdometryPublisher {
 private:

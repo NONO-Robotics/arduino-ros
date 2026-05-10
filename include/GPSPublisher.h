@@ -16,6 +16,10 @@
  *
  * This class handles the initialization and publishing of GPS data (NavSatFix)
  * to a ROS 2 topic using micro-ROS.
+ * 
+ * Usage Context: Used in the dedicated sensor node to broadcast global 
+ * positioning data. Paired with IMU and Odometry data, this allows outdoor
+ * robots to achieve accurate global localization via Nav2.
  */
 class GPSPublisher {
 private:

@@ -13,11 +13,15 @@
 #include "MicroRosTimeUtils.h"
 
 /**
- * @brief Class for managing a ROS node.
+ * @brief Core communication backbone for all micro-ROS nodes.
  *
- * This class provides methods to initialize, set up, and update a ROS node
- * using the micro-ROS framework. It also manages the executor and allocator
- * for the node.
+ * This class provides the foundational lifecycle management (initialize, set up, and update)
+ * for a ROS 2 node running on an ESP32. It acts as the primary network interface
+ * (handling Wi-Fi or Serial transparently via USE_WIFI_TRANSPORT) and manages
+ * the underlying micro-ROS executor and allocator.
+ * 
+ * Usage Context: Instantiated at the `setup()` of every firmware project
+ * (e.g., movement, sensors, odometry) to establish the link with the micro-ROS agent.
  */
 class RosNodeManager {
 private:

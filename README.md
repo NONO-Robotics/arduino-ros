@@ -82,16 +82,48 @@ lib_deps =
 ### Core & Lifecycle
 
 #### **`RosNodeManager`**
-Manages Wi-Fi connection, micro-ROS session initialization, and the node executor.
-Uses `WiFiManager` to handle Wi-Fi connection (captive portal) and Agent IP/Port configuration.
+Manages micro-ROS session initialization, the node executor, and transport connection.
+It supports both **Wi-Fi** (via Captive Portal) and **Serial (USB)** connections. The connection mode is transparently selected using the `USE_WIFI_TRANSPORT` build flag.
 
-*   **Include**: `#include "RosNodeManager.h"`
-*   **Constructor**:
-    ```cpp
-    RosNodeManager(String nodeName, bool wifiEnergySavingMode = false, ...);
+**1. Wi-Fi Connection (Default/Standard)**
+Uses `WiFiManager` to handle Wi-Fi connection and Agent IP/Port configuration.
+*   **platformio.ini**:
+    ```ini
+    board_microros_transport = wifi
+    build_flags = 
+        -DUSE_WIFI_TRANSPORT
     ```
+*   **Initialization**:
+    ```cpp
+    #include "ArduinoRos.h"
+    RosNodeManager *nodeManager;
+
+    void setup() {
+        // Initializes Wi-Fi portal and connects to the micro-ROS agent
+        nodeManager = (new RosNodeManager("bot_node"))->setup();
+    }
+    ```
+
+**2. Serial (USB) Connection**
+Used for wired communication (e.g., outdoor robots).
+*   **platformio.ini**:
+    ```ini
+    board_microros_transport = serial
+    ; Do NOT define USE_WIFI_TRANSPORT
+    ```
+*   **Initialization**:
+    ```cpp
+    #include "ArduinoRos.h"
+    RosNodeManager *nodeManager;
+
+    void setup() {
+        // Initializes Serial connection to the micro-ROS agent
+        nodeManager = (new RosNodeManager("bot_node"))->setup();
+    }
+    ```
+
 *   **Key Methods**:
-    *   `setup()`: Connects to Wi-Fi (opens captive portal if needed) and Agent.
+    *   `setup()`: Connects to Wi-Fi (if enabled) and initializes Agent session.
     *   `update(timeout_ns)`: Processes callbacks. Call in `loop()`.
     *   `isConnected()`: Pings the agent.
 
@@ -123,10 +155,14 @@ Control logic for Brushless DC motors (PWM + Direction + Brake).
 #### **Publishers**
 Wrappers for standard messages.
 *   `StringPublisher`, `IntPublisher`, `FloatPublisher` (takes `float`), `FloatArrayPublisher`.
-*   **`DifferentialRobotOdometryPublisher`**: Publishes odometry data.
+*   **`DifferentialRobotOdometryPublisher`**: Publishes odometry data (`x`, `y`, `theta`).
+    *   **Usage Context**: Essential in the wheel-publisher firmware. It computes differential drive odometry and sends it to the ROS 2 environment, providing necessary data for the robot's TF (Transform) tree and navigation algorithms.
+*   **`IMUPublisher` & `GPSPublisher`**: Publish `sensor_msgs/msg/Imu` and `sensor_msgs/msg/NavSatFix`.
+    *   **Usage Context**: Used in the dedicated sensor node to broadcast real-time state data. This data is typically consumed by `robot_localization` packages (EKF/UKF) to fuse with odometry for robust and accurate global navigation.
 
 #### **`RosTwistSubscriber`**
-Specialized subscriber for `geometry_msgs/msg/Twist` (velocity commands).
+Specialized subscriber for velocity commands (`geometry_msgs/msg/Twist`).
+*   **Usage Context**: Primarily used in the robot's movement nodes. It receives teleoperation commands (from a joystick) or autonomous velocity commands (from Nav2), which the traction controllers then translate into wheel speeds.
 *   **Callback Signature**: `void onCmd(const void *msg)`
 
 ---
