@@ -30,7 +30,7 @@
 
 ## 🌐 Ecosystem
 
-This library is part of the **4w-ros-robot** project family:
+This project is part of the **4w-ros-robot** family:
 
 * [4w-ros-robot](https://github.com/adrianmarino/4w-ros-robot)
   * **Sensor data publisher firmware**
@@ -49,7 +49,7 @@ This library is part of the **4w-ros-robot** project family:
       * [4w-robot-ros-w-publisher](https://github.com/adrianmarino/4w-robot-ros-w-publisher): Wheels angular velocity sensors publisher firmware.
       * [4w-robot-ros-imu-gps](https://github.com/adrianmarino/4w-ros-robot-imu-gps): IMU, GPS sensors publisher firmware.
   * **Outdoor**
-    * [4w-robot-cutting-control](https://github.com/adrianmarino/4w-robot-cutting-control): Automatic cutting motor contoller.
+    * [4w-robot-cutting-control](https://github.com/adrianmarino/4w-robot-cutting-control): Automatic cutting motor controller.
     * **Navigation**
       * [4w-outdoor-robot-ros-ws](https://github.com/adrianmarino/4w-outdoor-robot-ros-ws): Autonomous/manual navigation control project.
       * [4w-outdoor-robot-ros-movement](https://github.com/adrianmarino/4w-outdoor-robot-ros-movement.git): Outdoor Movement controller firmware.
@@ -57,12 +57,9 @@ This library is part of the **4w-ros-robot** project family:
       * [4w-outdoor-robot-ros-w-publisher](https://github.com/adrianmarino/4w-outdoor-robot-ros-w-publisher): Outdoor wheels angular velocity sensors publisher firmware.
       * [4w-outdoor-robot-ros-imu-gps](https://github.com/adrianmarino/4w-outdoor-ros-robot-imu-gps): IMU, GPS sensors publisher firmware.
 
-
----
-
 ## 📦 Installation
 
-Add the following to your `platformio.ini`. **Crucial:** `board_microros_transport` must be set to `wifi`.
+Add the library to your `platformio.ini`. **Note:** You must configure the micro-ROS transport. See [Core & Lifecycle](#core--lifecycle) for the exact configuration needed for Wi-Fi or Serial connections.
 
 ```ini
 [env:esp32dev]
@@ -70,7 +67,6 @@ platform = espressif32
 board = esp32dev
 framework = arduino
 board_microros_distro = humble
-board_microros_transport = wifi
 lib_deps =
   https://github.com/adrianmarino/arduino-ros
 ```
