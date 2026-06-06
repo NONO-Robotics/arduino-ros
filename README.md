@@ -28,9 +28,14 @@
 
 ---
 
+
 ## 🌐 Ecosystem
 
 This project is part of the **4w-ros-robot** family:
+
+> 💡 **Naming Convention Tip:**
+> * All subrepositories that **do not** have the prefix `outdoor` are used for the **Indoor Robot** version (except for shared utility libraries like `arduino-commons` and `arduino-ros`).
+> * Subrepositories specifically belonging to the **Outdoor Robot** are prefixed with `outdoor` (with the exception of `4w-robot-cutting-control` which is specific to the grass-cutting system).
 
 * [4w-ros-robot](https://github.com/adrianmarino/4w-ros-robot)
   * **Sensor data publisher firmware**
