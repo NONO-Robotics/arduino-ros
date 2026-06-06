@@ -50,7 +50,7 @@ public:
 private:
     LogLevel  level  = INFO;
     LogOutput output = OUTPUT_SERIAL;
-    unsigned long baud = 115200;
+    unsigned long baud = 921600;
     bool initialized = false;
     StringPublisher* ros_log_publisher = nullptr;
 

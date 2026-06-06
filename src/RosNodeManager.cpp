@@ -100,8 +100,15 @@ bool RosNodeManager::update(const uint64_t timeout_ns)
   if (checkAgentConnection->hasBeenReached())
   {
     if (!this->isConnected(agentRequestTimeoutMs)) {
-      logger.error("Connection to Micro-ROS Agent Lost!");
-      this->restart();
+      this->failedPingsCount++;
+      logger.warn("Connection to Micro-ROS Agent Lost! Strike: " + String(this->failedPingsCount));
+      
+      if (this->failedPingsCount >= this->maxFailedPings) {
+        logger.error("Max failed pings reached. Reiniciando ESP32...");
+        this->restart();
+      }
+    } else {
+      this->failedPingsCount = 0;
     }
 
     checkAgentConnection->reset();

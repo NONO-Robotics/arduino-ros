@@ -39,6 +39,8 @@ private:
   bool syncTime;
   DeltaTimeComputer *checkAgentConnection;
   int agentRequestTimeoutMs;
+  int failedPingsCount = 0;
+  int maxFailedPings = 5;
   long baudRate;
 
   void restart();
@@ -61,7 +63,7 @@ public:
 #endif
                  bool syncTime = true,
                  const int checkAgentConnectionIntervalMs = 10000,
-                 const int agentRequestTimeoutMs = 5000, long baudRate = 115200);
+                 const int agentRequestTimeoutMs = 5000, long baudRate = 921600);
 
   /**
    * @brief Checks if the node is connected to the micro-ROS agent.
