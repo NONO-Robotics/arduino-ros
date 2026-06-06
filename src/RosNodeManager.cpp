@@ -34,25 +34,25 @@ RosNodeManager *RosNodeManager::setup()
     syncClockTimeStamp(AR_UTC_TIME_OFFSET_IN_SECONDS);
   }
 #elif defined(USE_SERIAL_TRANSPORT)
-  delay(2000); // Dar tiempo al hardware para estabilizar la alimentación
+  delay(2000); // Allow hardware time to stabilize the power supply
 
   Serial.begin(this->baudRate); Serial.flush();
   set_microros_serial_transports(Serial);
 
-  // Aumentamos el timeout a 1000ms para asegurar la primera conexión
+  // Increase the timeout to 1000ms to ensure the first connection
   while (rmw_uros_ping_agent(1000, 1) != RMW_RET_OK) {
     delay(600);
   }
 
 #endif
-  delay(1000); // Pequeño margen para que el agente estabilice su estado
+  delay(1000); // Small margin for the agent to stabilize its state
 
-  // 3. Manejo de errores sin bloqueos definitivos
-  // En lugar de usar assertOk (que asumo detiene el código), evaluamos el retorno.
+  // 3. Error handling without definitive blocking
+  // Instead of using assertOk (which is assumed to halt execution), we evaluate the return value.
   rcl_ret_t support_ret = rclc_support_init(&support, 0, NULL, &allocator);
   if (support_ret != RCL_RET_OK)
   {
-    logger.error("Error al inicializar rclc_support. Reiniciando ESP32...");
+    logger.error("Error initializing rclc_support. Restarting ESP32...");
     this->restart();
   }
 
@@ -61,7 +61,7 @@ RosNodeManager *RosNodeManager::setup()
   rcl_ret_t node_ret = rclc_node_init_default(&node, charNodeName, "", &support);
   if (node_ret != RCL_RET_OK)
   {
-    logger.error("Error al inicializar el nodo. Reiniciando ESP32...");
+    logger.error("Error initializing the node. Restarting ESP32...");
     this->restart();
   }
 
@@ -70,7 +70,7 @@ RosNodeManager *RosNodeManager::setup()
   rcl_ret_t exec_ret = rclc_executor_init(&executor, &support.context, 1, &allocator);
   if (exec_ret != RCL_RET_OK)
   {
-    logger.error("Error al crear executor. Reiniciando ESP32...");
+    logger.error("Error creating executor. Restarting ESP32...");
     this->restart();
   }
 

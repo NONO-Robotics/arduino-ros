@@ -28,9 +28,9 @@ WifiConnectionManager::WifiConnectionManager(
     microRossAgentPort = new WiFiManagerParameter(AGENT_PORT_KEY, "Micro ROS Agent Port", agentPort.c_str(), 5);
     wifiManager.addParameter(microRossAgentIp);
     wifiManager.addParameter(microRossAgentPort);
-    wifiManager.setConnectTimeout(connectTimeoutInSecs);           // Espera 20 segundos antes de fallar
-    wifiManager.setConfigPortalTimeout(configPortalTimeoutInSecs); // Cierra el portal tras 10 minutos de inactividad
-    wifiManager.setCaptivePortalEnable(true);                      // Fuerza el portal cautivo
+    wifiManager.setConnectTimeout(connectTimeoutInSecs);           // Wait before failing (e.g. 20 seconds)
+    wifiManager.setConfigPortalTimeout(configPortalTimeoutInSecs); // Close the portal after inactivity
+    wifiManager.setCaptivePortalEnable(true);                      // Force captive portal
 }
 
 WifiConnectionManager::~WifiConnectionManager()
@@ -44,8 +44,8 @@ void WifiConnectionManager::connect()
 {
     if (!foundPreviouslySavedAgentInfo())
     {
-        WiFi.disconnect(true); // Borra el estado de conexión temporal
-        WiFi.mode(WIFI_OFF);   // Apaga el WiFi un momento
+        WiFi.disconnect(true); // Clear temporary connection state
+        WiFi.mode(WIFI_OFF);   // Turn off WiFi for a moment
         delay(100);
     }
 

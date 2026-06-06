@@ -39,9 +39,9 @@ void MicroRosTimeUtils::setCurrentStamp(std_msgs__msg__Header* header) {
         header->stamp.sec = (int32_t)(time_ms / 1000);
         header->stamp.nanosec = (uint32_t)((time_ms % 1000) * 1000000);
     } else {
-        // IMPORTANTE: Si el monitor sigue dando 139s de delay, 
-        // significa que esta sección sigue ejecutándose.
-        // Mientras no haya sync, mejor enviar 0 para que Nav2 sepa que el dato no es válido.
+        // IMPORTANT: If the monitor still reports a 139s delay, 
+        // it means this section is still executing.
+        // As long as there is no sync, it is better to send 0 so Nav2 knows the data is not valid.
         header->stamp.sec = 0;
         header->stamp.nanosec = 0;
     }

@@ -120,14 +120,8 @@ Used for wired communication (e.g., outdoor robots).
 
 *   **Key Methods**:
     *   `setup()`: Connects to Wi-Fi (if enabled) and initializes Agent session.
-    *   `update(timeout_ns)`: Processes callbacks. Call in `loop()`.
+    *   `update(timeout_ns)`: Processes callbacks and monitors the connection status. If the connection is lost, it automatically restarts the ESP32. Call in `loop()`.
     *   `isConnected()`: Pings the agent.
-
-#### **`RosNodeManagerRestartHandler`**
-Connection watchdog. Restarts the ESP32 if the Micro-ROS Agent is unreachable for a set duration.
-
-*   **Include**: `#include "RosNodeManagerRestartHandler.h"`
-*   **Usage**: call `update()` in the main loop instead of `nodeManager->update()`.
 
 ---
 

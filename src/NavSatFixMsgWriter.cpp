@@ -7,13 +7,13 @@ NavSatFixMsgWriter::NavSatFixMsgWriter(sensor_msgs__msg__NavSatFix *msg)
 
 void NavSatFixMsgWriter::write(GPSData *gpsData)
 {
-    // Indicar siempre que el servicio es GPS
+    // Always indicate that the service is GPS
     msg->status.service = sensor_msgs__msg__NavSatStatus__SERVICE_GPS;
 
-    // Usar el número de satélites para determinar el estado
+    // Use the number of satellites to determine the status
     int num_satellites = gpsData->getSatellites();
 
-    if (num_satellites < 3) // Menos de 3 satélites, no hay fix
+    if (num_satellites < 3) // Fewer than 3 satellites, no fix
     {
         msg->status.status = sensor_msgs__msg__NavSatStatus__STATUS_NO_FIX;
         msg->latitude = 0.0;
@@ -21,19 +21,19 @@ void NavSatFixMsgWriter::write(GPSData *gpsData)
         msg->altitude = 0.0;
         msg->position_covariance_type = sensor_msgs__msg__NavSatFix__COVARIANCE_TYPE_UNKNOWN;
     }
-    else // Tenemos suficientes satélites para una solución
+    else // We have enough satellites for a solution
     {
-        // NOTA: TinyGPSPlus no distingue fácilmente entre fix 2D y 3D,
-        // así que lo consideramos un fix general si hay 3 o más satélites.
-        // Un sistema más avanzado podría intentar leer la sentencia GGA directamente.
+        // NOTE: TinyGPSPlus does not easily distinguish between 2D and 3D fix,
+        // so we consider it a general fix if there are 3 or more satellites.
+        // A more advanced system could try to read the GGA sentence directly.
         msg->status.status = sensor_msgs__msg__NavSatStatus__STATUS_FIX;
 
-        // Rellenar los datos de posición
+        // Fill position data
         msg->latitude = gpsData->getLatitude();
         msg->longitude = gpsData->getLongitude();
         msg->altitude = gpsData->getAltitude();
 
-        // Calcular la covarianza como antes
+        // Calculate covariance as before
         double hdop = gpsData->getHDOP();
         double position_variance = hdop * hdop;
         msg->position_covariance[0] = position_variance;

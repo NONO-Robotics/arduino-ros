@@ -2,10 +2,10 @@
 
 #include "MicroRosPublisher.h"
 
-// ── Instancia global — constructor vacío, sin efectos secundarios ─────────────
+// ── Global instance — empty constructor, no side effects ─────────────
 Logger logger;
 
-// ── begin() — llamar en setup() ───────────────────────────────────────────────
+// ── begin() — call in setup() ───────────────────────────────────────────────
 void Logger::begin(unsigned long baud, LogLevel level, LogOutput output)
 {
     this->baud   = baud;
@@ -24,21 +24,21 @@ void Logger::begin(unsigned long baud, LogLevel level, LogOutput output)
             break;
 
         case OUTPUT_ROS:
-            // No abre serial. Llamar initRosPublisher() después del nodo.
+            // Does not open serial. Call initRosPublisher() after the node is initialized.
             break;
     }
 
     initialized = true;
 }
 
-// ── Configuración ─────────────────────────────────────────────────────────────
+// ── Configuration ─────────────────────────────────────────────────────────────
 void Logger::setLevel(LogLevel level)    { this->level  = level; }
 void Logger::setOutput(LogOutput output) { this->output = output; }
 
-// ── Output interno ────────────────────────────────────────────────────────────
+// ── Internal Output ────────────────────────────────────────────────────────────
 void Logger::printToOutput(const String& prefix, const String& msg)
 {
-    if (!initialized) return;  // silencioso si no se llamó begin()
+    if (!initialized) return;  // silent if begin() was not called
 
     String full = prefix + msg;
 
@@ -55,7 +55,7 @@ void Logger::printToOutput(const String& prefix, const String& msg)
     }
 }
 
-// ── Log principal ─────────────────────────────────────────────────────────────
+// ── Main Log ─────────────────────────────────────────────────────────────
 void Logger::log(LogLevel level, String msg)
 {
     if (level < this->level) return;
@@ -74,7 +74,7 @@ void Logger::log(LogLevel level, String msg)
     printToOutput(prefix, msg);
 }
 
-// ── Helpers de nivel ──────────────────────────────────────────────────────────
+// ── Level Helpers ──────────────────────────────────────────────────────────
 void Logger::trace(String msg) { log(TRACE, msg); }
 void Logger::debug(String msg) { log(DEBUG, msg); }
 void Logger::info(String msg)  { log(INFO,  msg); }
@@ -87,7 +87,7 @@ void Logger::debugPlot(String varName, float value) {
     printToOutput(">", varName + ":" + String(value));
 }
 
-// ── Checks de nivel ───────────────────────────────────────────────────────────
+// ── Level Checks ───────────────────────────────────────────────────────────
 bool Logger::isTrace() { return level <= TRACE; }
 bool Logger::isDebug() { return level <= DEBUG; }
 bool Logger::isInfo()  { return level <= INFO;  }
