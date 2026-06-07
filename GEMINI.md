@@ -18,7 +18,9 @@
 ## 4. 📜 Coding Standards & Conventions
 *   **Language & Comments**: Always use **English** and Doxygen formatting (`/** @brief ... */`) for interfaces.
 *   **Watchdog Execution**: Always invoke `nodeManager->update()` in the main loop to keep the watchdog active.
-*   **Memory Safety**: Frame IDs and string buffers must use static allocation or pre-allocated arrays (e.g. `char frame_id_buffer[20]`) to prevent memory leaks in the micro-ROS allocator.\n\n## 📜 Object-Oriented Programming & SOLID Standards
+*   **Memory Safety**: Frame IDs and string buffers must use static allocation or pre-allocated arrays (e.g. `char frame_id_buffer[20]`) to prevent memory leaks in the micro-ROS allocator.
+
+## 📜 Object-Oriented Programming & SOLID Standards
 *   **SOLID Principles**: Strictly follow SOLID practices adapted for C++ & Arduino:
     *   `S (Single Responsibility)`: Separate hardware communication, data parsing, and ROS publishers into different classes.
     *   `O (Open/Closed)`: Favor polymorphism and abstract interfaces (e.g. abstract classes for DCMotor, IMUSensor) to allow adding new models without editing client logic.
@@ -28,4 +30,4 @@
 *   **Embedded Design Patterns**: Use microcontroller-optimized design patterns:
     *   `Fluent Builder`: To cleanly configure and initialize hardware modules (e.g. BLDCMotorBuilder) without bloated constructors.
     *   `Strategy`: Decouple control algorithms (e.g. Mecanum vs Differential Kinematics) from physical actuator drivers.
-    *   `Observer / Callback`: Use non-blocking events and function pointers/lambdas for asynchronous ROS subscription and polling tasks.\n
+    *   `Observer / Callback`: Use non-blocking events and function pointers/lambdas for asynchronous ROS subscription and polling tasks.
