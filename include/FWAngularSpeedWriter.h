@@ -3,45 +3,60 @@
 #include <geometry_msgs/msg/twist.h>
 
 /**
- * FWAngularSpeedWriter class for calculating wheel speeds and robot movement
- * data.
- *
- * This class provides methods to convert robot movement data to wheel speeds
- * and vice versa, using the kinematic equations for a Mecanum wheeled robot.
+ * Base interface for wheel speed computation strategies.
+ * Each strategy implements a different kinematic model.
  */
-class FWAngularSpeedWriter {
+class AngularSpeedStrategy {
+public:
+  virtual ~AngularSpeedStrategy() = default;
+  virtual void compute(float vx, float vy, float wz,
+                        FourWheelAngularSpeed &out) = 0;
+};
+
+/**
+ * Mecanum kinematics strategy.
+ * For robots with Mecanum wheels (e.g. indoor robot).
+ */
+class MecanumStrategy : public AngularSpeedStrategy {
 private:
   float r;
   float k;
+
+public:
+  MecanumStrategy(float l, float w, float r);
+  void compute(float vx, float vy, float wz,
+               FourWheelAngularSpeed &out) override;
+};
+
+/**
+ * Skid-steer kinematics strategy.
+ * For robots with fixed wheels and different front/back radii
+ * (e.g. outdoor robot).
+ */
+class SkidSteerStrategy : public AngularSpeedStrategy {
+private:
+  float l;
+  float r_front;
+  float r_back;
+
+public:
+  SkidSteerStrategy(float l, float r_front, float r_back);
+  void compute(float vx, float vy, float wz,
+               FourWheelAngularSpeed &out) override;
+};
+
+/**
+ * Converts Twist messages to wheel angular speeds using a pluggable strategy.
+ */
+class FWAngularSpeedWriter {
+private:
+  AngularSpeedStrategy *strategy;
   FourWheelAngularSpeed *angularSpeed;
 
 public:
-  /**
-   * @brief Constructor for FWAngularSpeedWriter.
-   *
-   * @param l Distance between the front and rear wheels.
-   * @param w Distance between the left and right wheels.
-   * @param r Wheel radius.
-   * @param angularSpeed Pointer to the FourWheelAngularSpeed object.
-   */
-  FWAngularSpeedWriter(float l, float w, float r,
+  FWAngularSpeedWriter(AngularSpeedStrategy *strategy,
                        FourWheelAngularSpeed *angularSpeed);
 
-  /**
-   * @brief Convert robot movement data to wheel speeds.
-   *
-   * Calculates the required angular speed for each wheel based on the desired
-   * robot twist (linear and angular velocity) and writes it to the
-   * FourWheelAngularSpeed object.
-   *
-   * @param twist Desired robot movement (linear x, y and angular z).
-   */
   void write(geometry_msgs__msg__Twist *twist);
-
-  /**
-   * @brief Get the angular speed object.
-   *
-   * @return Reference to the FourWheelAngularSpeed object.
-   */
   FourWheelAngularSpeed &getAngularSpeed() const;
 };
