@@ -39,8 +39,11 @@ RosNodeManager *RosNodeManager::setup()
   Serial.begin(this->baudRate); Serial.flush();
   set_microros_serial_transports(Serial);
 
-  // Increase the timeout to 1000ms to ensure the first connection
-  while (rmw_uros_ping_agent(1000, 1) != RMW_RET_OK) {
+  // Bounded wait for the first agent connection; motors stay braked meanwhile.
+  const unsigned long firstPingTimeoutMs = 30000;
+  const unsigned long pingStart = millis();
+  while (rmw_uros_ping_agent(1000, 1) != RMW_RET_OK &&
+         (millis() - pingStart) < firstPingTimeoutMs) {
     delay(600);
   }
 
