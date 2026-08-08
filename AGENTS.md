@@ -11,7 +11,7 @@
 *   **Build**: `pio run`
 
 ## 3. ⚙️ Core Interfaces & Components
-*   **RosNodeManager**: Node lifecycle manager — handles Wi-Fi, serial configs, automatic hardware watchdog (restarts ESP32 if agent connection lost).
+*   **RosNodeManager**: Node lifecycle manager — handles Wi-Fi, serial configs, bounded first-connect ping-wait (30s timeout → ESP32 restart auto-recovery), automatic hardware watchdog (restarts ESP32 if agent connection lost).
 *   **Publishers**: `IMUPublisher`, `GPSPublisher`, `DifferentialRobotOdometryPublisher`, `FloatPublisher`, etc.
 *   **Subscribers**: `RosTwistSubscriber` → `/cmd_vel` velocity streams.
 
