@@ -42,6 +42,7 @@ private:
   int failedPingsCount = 0;
   int maxFailedPings = 5;
   long baudRate;
+  size_t executorHandles;
 
   void restart();
 
@@ -55,6 +56,7 @@ public:
    * @param syncTime (Optional) Whether to synchronize time with the agent. Default is true.
    * @param checkAgentConnectionIntervalMs (Optional) Interval in milliseconds to check agent connection. Default is 10000ms.
    * @param agentRequestTimeoutMs (Optional) Timeout in milliseconds for agent requests. Default is 5000ms.
+   * @param executorHandles (Optional) Number of executor callback handles. Default is 1.
    */
   RosNodeManager(String nodeName, 
 #ifdef USE_WIFI_TRANSPORT
@@ -63,7 +65,8 @@ public:
 #endif
                  bool syncTime = true,
                  const int checkAgentConnectionIntervalMs = 10000,
-                 const int agentRequestTimeoutMs = 5000, long baudRate = 921600);
+                 const int agentRequestTimeoutMs = 5000, long baudRate = 921600,
+                 size_t executorHandles = 1);
 
   /**
    * @brief Checks if the node is connected to the micro-ROS agent.

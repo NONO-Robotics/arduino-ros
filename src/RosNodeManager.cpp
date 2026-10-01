@@ -7,7 +7,8 @@ RosNodeManager::RosNodeManager(String nodeName,
 #endif
                                bool syncTime,
                                int checkAgentConnectionIntervalMs,
-                               int agentRequestTimeoutMs, long baudRate)
+                               int agentRequestTimeoutMs, long baudRate,
+                               size_t executorHandles)
 {
   this->nodeName = nodeName;
 #ifdef USE_WIFI_TRANSPORT
@@ -20,6 +21,7 @@ RosNodeManager::RosNodeManager(String nodeName,
   this->syncTime = syncTime;
   this->agentRequestTimeoutMs = agentRequestTimeoutMs;
   this->baudRate = baudRate;
+  this->executorHandles = executorHandles;
   checkAgentConnection = new DeltaTimeComputer(checkAgentConnectionIntervalMs);
   checkAgentConnection->reset();
 }
@@ -70,7 +72,8 @@ RosNodeManager *RosNodeManager::setup()
 
   delete[] charNodeName;
 
-  rcl_ret_t exec_ret = rclc_executor_init(&executor, &support.context, 1, &allocator);
+  rcl_ret_t exec_ret = rclc_executor_init(
+      &executor, &support.context, executorHandles, &allocator);
   if (exec_ret != RCL_RET_OK)
   {
     logger.error("Error creating executor. Restarting ESP32...");
