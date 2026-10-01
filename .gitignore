@@ -5,3 +5,4 @@ examples/basic_test/.pio
 .vscode/ipch
 
 __pycache__/
+.codebase-memory/
