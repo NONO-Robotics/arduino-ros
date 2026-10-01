@@ -159,7 +159,7 @@ Wrappers for standard messages.
 #### **`RosTwistSubscriber`**
 Specialized subscriber for velocity commands (`geometry_msgs/msg/Twist`).
 *   **Usage Context**: Primarily used in the robot's movement nodes. It receives teleoperation commands (from a joystick) or autonomous velocity commands (from Nav2), which the traction controllers then translate into wheel speeds.
-*   **Callback Signature**: `void onCmd(const void *msg)`
+*   **Callback Signature**: `void onCmd(geometry_msgs__msg__Twist *twist)`
 
 ---
 
@@ -233,7 +233,7 @@ void loop() {
 
 RosTwistSubscriber *twistSub;
 
-void onCmdVel(const void *msg) {
+void onCmdVel(geometry_msgs__msg__Twist *twist) {
     geometry_msgs__msg__Twist *twist = (geometry_msgs__msg__Twist *)msg;
     // Use twist->linear.x and twist->angular.z to control the robot
 }
@@ -273,7 +273,7 @@ RosTwistSubscriber *sub;
 BLDCMotor *motor;
 WToSignedPWMConverter *conv;
 
-void onCmdVel(const void *msg) {
+void onCmdVel(geometry_msgs__msg__Twist *twist) {
     float linearX = ((geometry_msgs__msg__Twist *)msg)->linear.x;
     int pwm = conv->wToSignedPWM(linearX / 0.05); // r=0.05m
     motor->setPwmSpeed(pwm);
