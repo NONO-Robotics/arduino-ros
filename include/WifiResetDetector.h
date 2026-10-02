@@ -5,6 +5,7 @@
 /**
  * @brief Class detects multiple resets to trigger Wi-Fi setting reset.
  */
+/** @brief Detects repeated resets and clears saved Wi-Fi settings. */
 class WifiResetDetector {
 private:
   MultiResetDetector *mrd;

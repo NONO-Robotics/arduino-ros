@@ -56,6 +56,7 @@ public:
    * @param syncTime (Optional) Whether to synchronize time with the agent. Default is true.
    * @param checkAgentConnectionIntervalMs (Optional) Interval in milliseconds to check agent connection. Default is 10000ms.
    * @param agentRequestTimeoutMs (Optional) Timeout in milliseconds for agent requests. Default is 5000ms.
+   * @param baudRate (Optional) Baud rate for the serial transport. Default is 921600.
    * @param executorHandles (Optional) Number of executor callback handles. Default is 1.
    */
   RosNodeManager(String nodeName, 

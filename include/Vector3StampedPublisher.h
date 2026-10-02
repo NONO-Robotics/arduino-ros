@@ -8,6 +8,7 @@
  * Ideal para publicar velocidades de ruedas donde x = rueda izquierda, y = rueda derecha,
  * garantizando la sincronización temporal con Nav2 y TF.
  */
+/** @brief Publishes timestamped three-dimensional vectors through micro-ROS. */
 class Vector3StampedPublisher {
 public:
     /**
@@ -19,6 +20,7 @@ public:
         MicroRosPublisher *publisher, 
         String frameId = "base_link");
 
+    /** @brief Destroy this publisher and release its allocated ROS message. */
     ~Vector3StampedPublisher();
 
     /**

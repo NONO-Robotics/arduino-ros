@@ -1,0 +1,12 @@
+PROJECT_NAME           = "arduino-ros"
+PROJECT_BRIEF          = "Shared PlatformIO/Arduino/ESP32 micro-ROS utilities"
+INPUT                  = include src README.md
+RECURSIVE              = YES
+USE_MDFILE_AS_MAINPAGE = README.md
+EXTRACT_ALL            = YES
+GENERATE_LATEX         = NO
+OUTPUT_DIRECTORY       = docs
+QUIET                  = YES
+HTML_EXTRA_STYLESHEET  = assets/theme.css
+
+PREDEFINED = USE_WIFI_TRANSPORT

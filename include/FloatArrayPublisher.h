@@ -17,6 +17,7 @@ public:
    */
   FloatArrayPublisher(MicroRosPublisher *publisher, size_t length);
 
+  /** @brief Destroy this publisher and release its allocated ROS message. */
   ~FloatArrayPublisher();
 
   /**

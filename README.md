@@ -15,16 +15,16 @@
 
 ## 📖 Table of Contents
 
-- [Ecosystem](#-ecosystem)
-- [Installation](#-installation)
-- [API Reference](#-api-reference)
-  - [Core & Lifecycle](#core--lifecycle)
-  - [Hardware Abstraction](#hardware-abstraction)
-  - [Kinematics & Odometry](#kinematics--odometry)
-  - [Communication](#communication)
-  - [Utilities](#utilities)
-- [Usage Example](#-usage-example)
-- [Build](#-build)
+- [Ecosystem](https://github.com/NONO-Robotics/arduino-ros#-ecosystem)
+- [Installation](https://github.com/NONO-Robotics/arduino-ros#-installation)
+- [API Reference](https://github.com/NONO-Robotics/arduino-ros#-api-reference)
+  - [Core & Lifecycle](https://github.com/NONO-Robotics/arduino-ros#core--lifecycle)
+  - [Hardware Abstraction](https://github.com/NONO-Robotics/arduino-ros#hardware-abstraction)
+  - [Kinematics & Odometry](https://github.com/NONO-Robotics/arduino-ros#kinematics--odometry)
+  - [Communication](https://github.com/NONO-Robotics/arduino-ros#communication)
+  - [Utilities](https://github.com/NONO-Robotics/arduino-ros#utilities)
+- [Usage Example](https://github.com/NONO-Robotics/arduino-ros#-usage-example)
+- [Build](https://github.com/NONO-Robotics/arduino-ros#-build)
 
 ---
 
@@ -65,7 +65,7 @@ This project is part of the **4w-ros-robot** family:
 
 ## 📦 Installation
 
-Add the library to your `platformio.ini`. **Note:** You must configure the micro-ROS transport. See [Core & Lifecycle](#core--lifecycle) for the exact configuration needed for Wi-Fi or Serial connections.
+Add the library to your `platformio.ini`. **Note:** You must configure the micro-ROS transport. See [Core & Lifecycle](https://github.com/NONO-Robotics/arduino-ros#core--lifecycle) for the exact configuration needed for Wi-Fi or Serial connections.
 
 ```ini
 [env:esp32dev]
@@ -89,40 +89,48 @@ It supports both **Wi-Fi** (via Captive Portal) and **Serial (USB)** connections
 
 **1. Wi-Fi Connection (Default/Standard)**
 Uses `WiFiManager` to handle Wi-Fi connection and Agent IP/Port configuration.
-*   **platformio.ini**:
-    ```ini
-    board_microros_transport = wifi
-    build_flags = 
-        -DUSE_WIFI_TRANSPORT
-    ```
-*   **Initialization**:
-    ```cpp
-    #include "ArduinoRos.h"
-    RosNodeManager *nodeManager;
 
-    void setup() {
-        // Initializes Wi-Fi portal and connects to the micro-ROS agent
-        nodeManager = (new RosNodeManager("bot_node"))->setup();
-    }
-    ```
+**platformio.ini:**
+
+```ini
+board_microros_transport = wifi
+build_flags = 
+    -DUSE_WIFI_TRANSPORT
+```
+
+**Initialization:**
+
+```cpp
+#include "ArduinoRos.h"
+RosNodeManager *nodeManager;
+
+void setup() {
+    // Initializes Wi-Fi portal and connects to the micro-ROS agent
+    nodeManager = (new RosNodeManager("bot_node"))->setup();
+}
+```
 
 **2. Serial (USB) Connection**
 Used for wired communication (e.g., outdoor robots).
-*   **platformio.ini**:
-    ```ini
-    board_microros_transport = serial
-    ; Do NOT define USE_WIFI_TRANSPORT
-    ```
-*   **Initialization**:
-    ```cpp
-    #include "ArduinoRos.h"
-    RosNodeManager *nodeManager;
 
-    void setup() {
-        // Initializes Serial connection to the micro-ROS agent
-        nodeManager = (new RosNodeManager("bot_node"))->setup();
-    }
-    ```
+**platformio.ini:**
+
+```ini
+board_microros_transport = serial
+; Do NOT define USE_WIFI_TRANSPORT
+```
+
+**Initialization:**
+
+```cpp
+#include "ArduinoRos.h"
+RosNodeManager *nodeManager;
+
+void setup() {
+    // Initializes Serial connection to the micro-ROS agent
+    nodeManager = (new RosNodeManager("bot_node"))->setup();
+}
+```
 
 *   **Key Methods**:
     *   `setup()`: Connects to Wi-Fi (if enabled) and initializes Agent session.

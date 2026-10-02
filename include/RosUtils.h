@@ -14,6 +14,12 @@ const wifi_power_t WIFI_POWER_20_5dBm = (wifi_power_t)82; // 20.5 dBm * 4 = 82
 #endif
 
 
+/**
+ * @brief Check a micro-ROS return code and report failure.
+ * @param result Return code to check.
+ * @param msg Context included in the failure report.
+ * @return True when result is RCL_RET_OK.
+ */
 bool assertOk(rcl_ret_t result, String msg);
 
 #ifdef USE_WIFI_TRANSPORT

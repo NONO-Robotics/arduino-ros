@@ -17,21 +17,22 @@ private:
 
 public:
   /**
-   * Constructor for MicroRosPublisher.
+   * Create an Int32 publisher.
    * @param node Pointer to the ROS node
    * @param topic_name Name of the topic to publish
-   * @param type_support Type support for the message
    * @param delayMillis Delay in milliseconds between messages
+   * @param reliable Use reliable QoS instead of best-effort
    */
   static MicroRosPublisher *createInt(rcl_node_t *node, String topic_name,
                                       int delayMillis = 0,
                                       bool reliable = true);
 
   /**
-   * Create a publisher for float arrays.
+   * Create a Float32 publisher.
    * @param node Pointer to the ROS node
    * @param topic_name Name of the topic to publish
    * @param delayMillis Delay in milliseconds between messages
+   * @param reliable Use reliable QoS instead of best-effort
    */
   static MicroRosPublisher *createFloat(rcl_node_t *node, String topic_name,
                                         int delayMillis = 0,
@@ -42,12 +43,21 @@ public:
    * @param node Pointer to the ROS node
    * @param topic_name Name of the topic to publish
    * @param delayMillis Delay in milliseconds between messages
+   * @param reliable Use reliable QoS instead of best-effort
    */
   static MicroRosPublisher *createFloatArray(rcl_node_t *node,
                                              String topic_name,
                                              int delayMillis = 0,
                                              bool reliable = true);
 
+  /**
+   * @brief Create a Vector3Stamped publisher.
+   * @param node Initialized ROS node that owns the publisher.
+   * @param topic_name Topic to publish.
+   * @param delayMillis Minimum interval between publications in milliseconds.
+   * @param reliable True for reliable QoS; false for best effort.
+   * @return Caller-owned publisher instance.
+   */
   static MicroRosPublisher *createVector3Stamped(rcl_node_t *node,
                                                  String topic_name,
                                                  int delayMillis = 0,
