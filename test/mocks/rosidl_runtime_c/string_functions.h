@@ -22,3 +22,7 @@ inline bool rosidl_runtime_c__String__assign(rosidl_runtime_c__String* value,
   value->capacity = length + 1;
   return true;
 }
+
+inline bool rosidl_runtime_c__String__init(rosidl_runtime_c__String* value) {
+  return rosidl_runtime_c__String__assign(value, "");
+}
