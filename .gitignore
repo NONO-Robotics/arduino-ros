@@ -6,3 +6,6 @@ examples/basic_test/.pio
 
 __pycache__/
 .codebase-memory/
+/.pio/
+coverage/
+*.gcov
