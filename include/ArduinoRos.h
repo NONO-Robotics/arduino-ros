@@ -1,8 +1,8 @@
 /**
- * @file ArduinoRos.h"
- * @brief Master #include file for the Arduino-ROS robot project.
+ * @file ArduinoRos.h
+ * @brief Master `#include` file for the Arduino-ROS robot project.
  *
- * This file #includes all necessary headers for the project components,
+ * This file pulls in all necessary headers for the project components,
  * including sensors, motors, publishers, subscribers, and ROS utilities.
  */
 #include "DifferentialRobotOdometry.h"

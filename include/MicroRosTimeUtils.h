@@ -6,6 +6,7 @@
 /**
  * @brief Utility for handling time synchronization in micro-ROS.
  */
+/** @brief Synchronizes and applies the micro-ROS agent clock. */
 class MicroRosTimeUtils {
 public:
     /**
@@ -14,6 +15,12 @@ public:
      */
     static bool syncSession(int timeout_ms = 500);
 
+    /**
+     * @brief Synchronize time, retrying failed attempts.
+     * @param timeout_ms Maximum wait time per attempt in milliseconds.
+     * @param attempts Maximum synchronization attempts.
+     * @return True when any attempt succeeds.
+     */
     static bool syncSessionWithRetry(int timeout_ms = 500, int attempts = 50);
 
     /**

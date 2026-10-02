@@ -43,6 +43,7 @@ public:
                         unsigned long configPortalTimeoutInSecs = 600,
                         String configPath = "/wifi_manager_config.json");
 
+  /** @brief Destroy this manager and release allocated configuration storage. */
   ~WifiConnectionManager();
 
   /**
