@@ -1,73 +1,26 @@
-<div align="center">
-  <img src="https://github.com/adrianmarino/4w-ros-robot/blob/main/images/indoor-preview2.jpg" alt="Arduino ROS Robot Logo"/>
-  
-  # Arduino-ROS Library
+# Arduino-ROS
 
-  [![PlatformIO Registry](https://img.shields.io/badge/PlatformIO-Registry-red.svg)](https://registry.platformio.org/libraries/adrianmarino/arduino-ros)
-  [![Framework](https://img.shields.io/badge/Framework-Arduino-blue.svg)](https://www.arduino.cc/)
-  [![ROS 2](https://img.shields.io/badge/ROS%202-Humble-22314E.svg)](https://docs.ros.org/en/humble/index.html)
-  [![Docs](https://img.shields.io/badge/docs-Doxygen-blue.svg)](https://nono-robotics.github.io/arduino-ros/)
-  [![Coverage](https://img.shields.io/badge/coverage-report-brightgreen.svg)](https://nono-robotics.github.io/arduino-ros/coverage/)
-  [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-</div>
+Arduino-ROS provides shared micro-ROS lifecycle, publishers, subscribers, and robot message helpers for ESP32 Arduino firmware. It is used by both Indoor and Outdoor robots; robot-specific pin assignments, speed limits, and calibration remain in firmware.
 
----
+[Doxygen API reference](https://nono-robotics.github.io/arduino-ros/) · [Coverage report](https://nono-robotics.github.io/arduino-ros/coverage/) · [License](LICENSE)
 
-**Arduino-ROS** provides a robust framework for integrating **micro-ROS** on ESP32 microcontrollers using **PlatformIO**. It facilitates node lifecycle management, Wi-Fi connection stability, typed message publishing/subscription, and hardware abstraction for differential drive robots (BLDC motors, encoders, and kinematics).
+## Contents
 
-## 📖 Table of Contents
+- [Requirements and installation](#requirements-and-installation)
+- [How a node runs](#how-a-node-runs)
+- [Transport configuration](#transport-configuration)
+- [API overview](#api-overview)
+- [Examples](#examples)
+- [Build and tests](#build-and-tests)
+- [Troubleshooting](#troubleshooting)
 
-- [Ecosystem](https://github.com/NONO-Robotics/arduino-ros#-ecosystem)
-- [Installation](https://github.com/NONO-Robotics/arduino-ros#-installation)
-- [API Reference](https://github.com/NONO-Robotics/arduino-ros#-api-reference)
-  - [Core & Lifecycle](https://github.com/NONO-Robotics/arduino-ros#core--lifecycle)
-  - [Hardware Abstraction](https://github.com/NONO-Robotics/arduino-ros#hardware-abstraction)
-  - [Kinematics & Odometry](https://github.com/NONO-Robotics/arduino-ros#kinematics--odometry)
-  - [Communication](https://github.com/NONO-Robotics/arduino-ros#communication)
-  - [Utilities](https://github.com/NONO-Robotics/arduino-ros#utilities)
-- [Usage Example](https://github.com/NONO-Robotics/arduino-ros#-usage-example)
-- [Build](https://github.com/NONO-Robotics/arduino-ros#-build)
+## Requirements and installation
 
----
+- ESP32, Arduino framework, PlatformIO, and a ROS 2 Humble micro-ROS Agent reachable over configured Wi-Fi or serial transport.
+- PlatformIO micro-ROS integration compatible with the selected ESP32 board and transport.
+- `arduino-commons` is a dependency for shared data types, sensors, and motor utilities. PlatformIO resolves declared library dependencies; if configuring dependencies manually, add both libraries.
 
-
-## 🌐 Ecosystem
-
-This project is part of the **4w-ros-robot** family:
-
-> 💡 **Naming Convention Tip:**
-> * All subrepositories that **do not** have the prefix `outdoor` are used for the **Indoor Robot** version (except for shared utility libraries like `arduino-commons` and `arduino-ros`).
-> * Subrepositories specifically belonging to the **Outdoor Robot** are prefixed with `outdoor` (with the exception of `4w-robot-cutting-control` which is specific to the grass-cutting system).
-
-* [4w-ros-robot](https://github.com/adrianmarino/4w-ros-robot)
-  * **Sensor data publisher firmware**
-      * [4w-robot-ros-lidar](https://github.com/adrianmarino/4w-robot-ros-lidar): LIDAR sensor publisher firmware.
-  * **Libraries**
-    * [arduino-ros](https://github.com/adrianmarino/arduino-ros): ROS common library.
-    * [arduino-commons](https://github.com/adrianmarino/arduino-commons): Arduino common library.
-  * **Design**
-    * [4w-robot-ros-kicad](https://github.com/adrianmarino/4w-robot-ros-kicad) PCB's Design.
-    * [Solidworks Model](https://drive.google.com/drive/folders/1mQg-BSRZyyYhnBoig6Qm0Zf43U8bTAA7?usp=sharing): 3D model design.
-  * **Indoor**
-    * **Navigation**
-      * [4w-robot-ros-ws](https://github.com/adrianmarino/4w-robot-ros-ws): Autonomous/manual navigation control project.
-      * [4w-robot-ros-movement](https://github.com/adrianmarino/4w-robot-ros-movement.git): Movement controller firmware.
-    * **Sensor data publisher firmware**
-      * [4w-robot-ros-w-publisher](https://github.com/adrianmarino/4w-robot-ros-w-publisher): Wheels angular velocity sensors publisher firmware.
-      * [4w-robot-ros-imu-gps](https://github.com/adrianmarino/4w-ros-robot-imu-gps): IMU, GPS sensors publisher firmware.
-  * **Outdoor**
-    * [mowbot-connect](https://github.com/adrianmarino/mowbot-connect): Real-time Web Control HUD and management application.
-    * [4w-robot-cutting-control](https://github.com/adrianmarino/4w-robot-cutting-control): Automatic cutting motor controller.
-    * **Navigation**
-      * [4w-outdoor-robot-ros-ws](https://github.com/adrianmarino/4w-outdoor-robot-ros-ws): Autonomous/manual navigation control project.
-      * [4w-outdoor-robot-ros-movement](https://github.com/adrianmarino/4w-outdoor-robot-ros-movement.git): Outdoor Movement controller firmware.
-    * **Sensor data publisher firmware**
-      * [4w-outdoor-robot-ros-w-publisher](https://github.com/adrianmarino/4w-outdoor-robot-ros-w-publisher): Outdoor wheels angular velocity sensors publisher firmware.
-      * [4w-outdoor-robot-ros-imu-gps](https://github.com/adrianmarino/4w-outdoor-ros-robot-imu-gps): IMU, GPS sensors publisher firmware.
-
-## 📦 Installation
-
-Add the library to your `platformio.ini`. **Note:** You must configure the micro-ROS transport. See [Core & Lifecycle](https://github.com/NONO-Robotics/arduino-ros#core--lifecycle) for the exact configuration needed for Wi-Fi or Serial connections.
+Example `platformio.ini` (adapt board and transport settings to the firmware):
 
 ```ini
 [env:esp32dev]
@@ -79,255 +32,244 @@ lib_deps =
   https://github.com/adrianmarino/arduino-ros
 ```
 
----
+Configure the micro-ROS Agent endpoint and the `board_microros_transport` setting for your PlatformIO micro-ROS package. The Wi-Fi example below also enables this library's `USE_WIFI_TRANSPORT` path.
 
-## 📖 Documentation
+## How a node runs
 
-See [Documentation Site](https://nono-robotics.github.io/arduino-ros/)
+Create and initialize the node once in `setup()`. Create publishers and subscribers after `setup()` has initialized the node and executor. Call `update()` on every pass through `loop()` so incoming callbacks run and connection health is monitored.
 
----
+```mermaid
+sequenceDiagram
+    participant FW as ESP32 firmware
+    participant NM as RosNodeManager
+    participant Agent as micro-ROS Agent
+    participant Exec as Executor callbacks
+    FW->>NM: setup() once
+    NM->>Agent: connect and initialize node
+    loop every loop()
+      FW->>NM: update()
+      NM->>Exec: spin and dispatch messages
+      Exec-->>FW: invoke subscriber callback
+      NM->>Agent: monitor session
+    end
+```
 
-## 📚 API Reference
+`setup()` returns the same manager pointer for convenient chaining. Its first connection is bounded; a missing Agent or lost connection can cause the ESP32 to restart, as documented in [`RosNodeManager`](include/RosNodeManager.h). Do not add blocking delays to `loop()`; call `update()` frequently.
 
-### Core & Lifecycle
+## Transport configuration
 
-#### **`RosNodeManager`**
-Manages micro-ROS session initialization, the node executor, and transport connection.
-It supports both **Wi-Fi** (via Captive Portal) and **Serial (USB)** connections. The connection mode is transparently selected using the `USE_WIFI_TRANSPORT` build flag.
+### Wi-Fi
 
-**1. Wi-Fi Connection (Default/Standard)**
-Uses `WiFiManager` to handle Wi-Fi connection and Agent IP/Port configuration.
-
-**platformio.ini:**
+Configure PlatformIO transport and define the Wi-Fi build flag. `RosNodeManager` uses the Wi-Fi connection manager and configuration portal.
 
 ```ini
 board_microros_transport = wifi
-build_flags = 
-    -DUSE_WIFI_TRANSPORT
+build_flags = -DUSE_WIFI_TRANSPORT
 ```
 
-**Initialization:**
+### Serial
 
-```cpp
-#include "ArduinoRos.h"
-RosNodeManager *nodeManager;
+Use the PlatformIO micro-ROS serial transport and omit `USE_WIFI_TRANSPORT`. Set the Agent-side serial connection and baud rate consistently with firmware; manager default baud rate is `921600`.
 
-void setup() {
-    // Initializes Wi-Fi portal and connects to the micro-ROS agent
-    nodeManager = (new RosNodeManager("bot_node"))->setup();
-}
-```
+## API overview
 
-**2. Serial (USB) Connection**
-Used for wired communication (e.g., outdoor robots).
+| Area | Types | Role |
+|---|---|---|
+| Lifecycle | `RosNodeManager` | Owns node, allocator, executor, connection checks, optional clock sync |
+| Basic publishers | `StringPublisher`, `IntPublisher`, `FloatPublisher`, `FloatArrayPublisher` | `std_msgs` string, integer, float, and float-array messages |
+| Sensor publishers | `IMUPublisher`, `GPSPublisher` | `sensor_msgs/Imu` and `sensor_msgs/NavSatFix` |
+| Motion input | `RosTwistSubscriber` | Receives `geometry_msgs/Twist` commands, commonly `/cmd_vel` |
+| Wheel feedback input | `WheelSpeedsSubscriber` | Validates six-element `Float32MultiArray` and provides typed `WheelSpeeds` |
+| Odometry | `DifferentialRobotOdometryPublisher`, `Vector3StampedPublisher` | Publishes odometry state or stamped vectors |
+| Utilities | `Logger`, `MicroRosTimeUtils` | Serial/ROS logging and Agent time synchronization |
 
-**platformio.ini:**
+`ArduinoRos.h` is the umbrella include for most APIs. Include `WheelSpeedsSubscriber.h` explicitly; that header is not currently included by the umbrella. `WheelSpeedsSubscriber` accepts exactly six finite float values, in order: left average, right average, front-left, front-right, back-left, back-right. Its fault callback runs on null, wrong-size, or non-finite input. The `WheelSpeeds` type comes from `arduino-commons` and uses rad/s.
 
-```ini
-board_microros_transport = serial
-; Do NOT define USE_WIFI_TRANSPORT
-```
+ROS graph ownership flows one direction: firmware creates ROS entities from the initialized node/executor; callbacks update application state; `loop()` services the executor.
 
-**Initialization:**
+## Examples
 
-```cpp
-#include "ArduinoRos.h"
-RosNodeManager *nodeManager;
+### Minimal lifecycle and `/cmd_vel` subscriber
 
-void setup() {
-    // Initializes Serial connection to the micro-ROS agent
-    nodeManager = (new RosNodeManager("bot_node"))->setup();
-}
-```
-
-*   **Key Methods**:
-    *   `setup()`: Connects to Wi-Fi (if enabled) and initializes Agent session.
-    *   `update(timeout_ns)`: Processes callbacks and monitors the connection status. If the connection is lost, it automatically restarts the ESP32. Call in `loop()`.
-    *   `isConnected()`: Pings the agent.
-
----
-
-### Hardware Abstraction
-
-#### **`BLDCMotor`**
-Control logic for Brushless DC motors (PWM + Direction + Brake).
-
-*   **Include**: `#include "BLDCMotor.h"`, `#include "BLDCMotorBuilder.h"`
-*   **Builder**:
-    ```cpp
-    BLDCMotor *motor = BLDCMotorBuilder(pinPWM, pinDIR, pinBRAKE)
-                        .setResolutionInBits(11)
-                        .build();
-    ```
-
----
-
-### Communication
-
-#### **Publishers**
-Wrappers for standard messages.
-*   `StringPublisher`, `IntPublisher`, `FloatPublisher` (takes `float`), `FloatArrayPublisher`.
-*   **`DifferentialRobotOdometryPublisher`**: Publishes odometry data (`x`, `y`, `theta`).
-    *   **Usage Context**: Essential in the wheel-publisher firmware. It computes differential drive odometry and sends it to the ROS 2 environment, providing necessary data for the robot's TF (Transform) tree and navigation algorithms.
-*   **`IMUPublisher` & `GPSPublisher`**: Publish `sensor_msgs/msg/Imu` and `sensor_msgs/msg/NavSatFix`.
-    *   **Usage Context**: Used in the dedicated sensor node to broadcast real-time state data. This data is typically consumed by `robot_localization` packages (EKF/UKF) to fuse with odometry for robust and accurate global navigation.
-
-#### **`RosTwistSubscriber`**
-Specialized subscriber for velocity commands (`geometry_msgs/msg/Twist`).
-*   **Usage Context**: Primarily used in the robot's movement nodes. It receives teleoperation commands (from a joystick) or autonomous velocity commands (from Nav2), which the traction controllers then translate into wheel speeds.
-*   **Callback Signature**: `void onCmd(geometry_msgs__msg__Twist *twist)`
-
----
-
-## 💡 Class Examples
-
-### 1. Basic Publishers (String, Int, Float)
-```cpp
-#include "ArduinoRos.h"
-
-StringPublisher *strPub;
-IntPublisher *intPub;
-
-void setup() {
-    // Assuming nodeManager is already set up...
-    strPub = new StringPublisher(MicroRosPublisher::createString(nodeManager->getNode(), "status_topic"));
-    intPub = new IntPublisher(MicroRosPublisher::createInt(nodeManager->getNode(), "battery_level"));
-}
-
-void loop() {
-    strPub->publish("Robot is running smoothly");
-    intPub->publish(85);
-    delay(1000);
-}
-```
-
-### 2. Sensor Publishers (IMU & GPS)
-```cpp
-#include "ArduinoRos.h"
-
-IMUPublisher *imuPub;
-GPSPublisher *gpsPub;
-
-void setup() {
-    imuPub = new IMUPublisher(nodeManager->getNode(), nodeManager->getAllocator(), "/imu/data", "imu_link");
-    gpsPub = new GPSPublisher(nodeManager->getNode(), nodeManager->getAllocator(), "/gps/fix", "gps_link");
-}
-
-void loop() {
-    IMUData imuData = { /* populate with sensor data */ };
-    imuPub->publish(&imuData);
-    
-    GPSData gpsData = { /* populate with sensor data */ };
-    gpsPub->publish(&gpsData);
-    delay(100);
-}
-```
-
-### 3. Differential Robot Odometry Publisher
-```cpp
-#include "ArduinoRos.h"
-
-DifferentialRobotOdometryPublisher *odomPub;
-
-void setup() {
-    odomPub = new DifferentialRobotOdometryPublisher(nodeManager->getNode(), "odom", "base_link");
-}
-
-void loop() {
-    DifferentialRobotOdometry odomData;
-    odomData.x = 1.5;
-    odomData.y = 2.0;
-    odomData.theta = 0.5;
-    odomPub->publish(odomData);
-    delay(50);
-}
-```
-
-### 4. Twist Subscriber
-```cpp
-#include "ArduinoRos.h"
-
-RosTwistSubscriber *twistSub;
-
-void onCmdVel(geometry_msgs__msg__Twist *twist) {
-    geometry_msgs__msg__Twist *twist = (geometry_msgs__msg__Twist *)msg;
-    // Use twist->linear.x and twist->angular.z to control the robot
-}
-
-void setup() {
-    twistSub = new RosTwistSubscriber(nodeManager->getNode(), nodeManager->getExecutor(), "cmd_vel", onCmdVel);
-}
-```
-
-### 5. Utilities (Logger & Time Sync)
-```cpp
-#include "ArduinoRos.h"
-
-void setup() {
-    logger.begin(115200, INFO, OUTPUT_SERIAL);
-    logger.info("Initializing node...");
-    
-    // Sync time with agent
-    if (MicroRosTimeUtils::syncSessionWithRetry(500, 10)) {
-        logger.info("Time synchronized!");
-    } else {
-        logger.warn("Time sync failed.");
-    }
-}
-```
-
----
-
-## 🚀 Full Integration Example
+This example only records the latest command. Connect a calibrated controller before applying commands to a real robot.
 
 ```cpp
 #include <Arduino.h>
 #include "ArduinoRos.h"
 
-RosNodeManager *nodeManager;
-RosTwistSubscriber *sub;
-BLDCMotor *motor;
-WToSignedPWMConverter *conv;
+RosNodeManager nodeManager("robot_node");
+RosTwistSubscriber *twistSub;
+volatile float targetLinearMps = 0.0F;
+volatile float targetAngularRadps = 0.0F;
 
 void onCmdVel(geometry_msgs__msg__Twist *twist) {
-    float linearX = ((geometry_msgs__msg__Twist *)msg)->linear.x;
-    int pwm = conv->wToSignedPWM(linearX / 0.05); // r=0.05m
-    motor->setPwmSpeed(pwm);
+  if (twist == nullptr) return;
+  targetLinearMps = twist->linear.x;
+  targetAngularRadps = twist->angular.z;
 }
 
 void setup() {
-    motor = new BLDCMotorBuilder(25, 26, 27).build();
-    motor->setup();
-    conv = new WToSignedPWMConverter(10.0, 12, 100);
-
-    // Node Name: "bot_node"
-    // Wi-Fi and Agent IP are configured via Captive Portal on first run.
-    nodeManager = new RosNodeManager("bot_node"); 
-    nodeManager->setup();
-
-    sub = new RosTwistSubscriber(nodeManager->getNode(), nodeManager->getExecutor(), "cmd_vel", onCmdVel);
+  nodeManager.setup();
+  twistSub = new RosTwistSubscriber(
+      nodeManager.getNode(), nodeManager.getExecutor(), "/cmd_vel", onCmdVel);
 }
 
 void loop() {
-    if (!nodeManager->update()) ESP.restart();
+  nodeManager.update();
+  // Use latest targets in nonblocking control logic.
 }
 ```
 
-## 🛠 Build
+The subscriber stores callback registration internally. Keep the subscriber alive for the node lifetime. In application firmware, keep all entity creation in `setup()` and use project ownership conventions for its lifetime; never allocate publishers/subscribers per message or per loop iteration.
 
-```bash
+### Basic publisher
+
+The publisher adapter wraps a `MicroRosPublisher`; construct both once after node setup. Use a timer or elapsed-time check to control publish rate without blocking executor servicing.
+
+```cpp
+#include <Arduino.h>
+#include "ArduinoRos.h"
+
+RosNodeManager nodeManager("status_node");
+FloatPublisher *batteryPublisher;
+uint32_t lastPublishMs = 0;
+
+void setup() {
+  nodeManager.setup();
+  batteryPublisher = new FloatPublisher(
+      MicroRosPublisher::createFloat(nodeManager.getNode(), "/battery/voltage"));
+}
+
+void loop() {
+  nodeManager.update();
+  const uint32_t now = millis();
+  if (now - lastPublishMs >= 1000) {
+    lastPublishMs = now;
+    batteryPublisher->publish(12.4F); // Replace with measured voltage.
+  }
+}
+```
+
+`MicroRosPublisher::createInt`, `createFloat`, `createFloatArray`, and `createString` accept node, topic, optional minimum interval in milliseconds, and optional reliable-QoS flag. `StringPublisher` and `FloatArrayPublisher` own message memory; keep them alive as long as they publish.
+
+### IMU and GPS publishing
+
+Pass the initialized allocator and node. Populate data using the shared `IMUData`/`GPSData` contract from `arduino-commons`; sensor driver units and covariance must reflect the actual sensor configuration.
+
+```cpp
+#include <Arduino.h>
+#include "ArduinoRos.h"
+
+RosNodeManager nodeManager("sensor_node");
+IMUPublisher *imuPublisher;
+GPSPublisher *gpsPublisher;
+IMUData imuData;
+GPSData gpsData;
+
+void setup() {
+  nodeManager.setup();
+  imuPublisher = new IMUPublisher(nodeManager.getNode(),
+                                 nodeManager.getAllocator(), "/imu/data", "imu_link");
+  gpsPublisher = new GPSPublisher(nodeManager.getNode(),
+                                  nodeManager.getAllocator(), "/gps/fix", "gps_link");
+}
+
+void loop() {
+  nodeManager.update();
+  // Poll sensors without blocking, then publish when each has a fresh sample.
+  // imuPublisher->publish(&imuData);
+  // gpsPublisher->publish(&gpsData);
+}
+```
+
+### Differential-drive state publication
+
+`DifferentialRobotOdometry` is a state value defined by the dependency library, not an integration routine that accepts `x/y/theta`. Update it with the four wheel angular speeds, then publish that state.
+
+```cpp
+#include <Arduino.h>
+#include "ArduinoRos.h"
+
+RosNodeManager nodeManager("wheel_node");
+DifferentialRobotOdometryPublisher *odomPublisher;
+DifferentialRobotOdometry odometry;
+FourWheelAngularSpeed wheelSpeeds;
+
+void setup() {
+  nodeManager.setup();
+  odomPublisher = new DifferentialRobotOdometryPublisher(
+      nodeManager.getNode(), "/wheel/odometry", "base_link");
+}
+
+void loop() {
+  nodeManager.update();
+  // Replace values with encoder measurements in rad/s.
+  wheelSpeeds.updateFrom(1.0F, 1.0F, 1.0F, 1.0F);
+  odometry.updateFrom(wheelSpeeds);
+  odomPublisher->publish(odometry);
+}
+```
+
+### Wheel-speed subscription
+
+The source topic must publish a six-element `std_msgs/msg/Float32MultiArray` with the ordering documented above. Subscriber currently dispatches through a single static instance; use one instance per firmware process.
+
+```cpp
+#include <Arduino.h>
+#include "ArduinoRos.h"
+#include "WheelSpeedsSubscriber.h"
+
+RosNodeManager nodeManager("movement_node");
+WheelSpeedsSubscriber *wheelSpeedsSub;
+
+void onWheelSpeeds(const WheelSpeeds &speeds) {
+  // Values are angular velocities in rad/s.
+  Serial.printf("left %.3f, right %.3f\n",
+                speeds.getAverageLeftWInRad(), speeds.getAverageRightWInRad());
+}
+
+void onWheelSpeedFault() {
+  // Treat malformed data as invalid feedback; safe response belongs to firmware.
+}
+
+void setup() {
+  Serial.begin(115200);
+  nodeManager.setup();
+  wheelSpeedsSub = new WheelSpeedsSubscriber(
+      nodeManager.getNode(), nodeManager.getExecutor(), "/wheel/speeds",
+      onWheelSpeeds, onWheelSpeedFault);
+}
+
+void loop() {
+  nodeManager.update();
+}
+```
+
+The `RosNodeManager` constructor's arguments differ when `USE_WIFI_TRANSPORT` is defined because Wi-Fi options precede the common arguments. Prefer defaults unless firmware has concrete reason to configure executor capacity or timing; ensure capacity covers every registered subscription.
+
+## Build and tests
+
+Compile the included PlatformIO example:
+
+```sh
 cd examples/basic_test
 pio run
 ```
 
-## 📊 Test Coverage
+Run host-native regression tests (mock-backed; no ESP32 hardware or live Agent):
 
-The latest native regression coverage report is published with the documentation site:
-[nono-robotics.github.io/arduino-ros/coverage](https://nono-robotics.github.io/arduino-ros/coverage/) (regenerated on every push to `main`).
-
-Generate it locally with:
-
-```bash
+```sh
+pio test -e native
 commands/regression-test
-# open coverage/index.html
 ```
+
+The regression command prints coverage and creates `coverage/index.html`. Native tests do not validate transport connectivity, ROS graph interoperability, electrical IO, or sensor/motor integration; validate these on the intended hardware before deployment.
+
+## Troubleshooting
+
+| Symptom | Check |
+|---|---|
+| Node never connects | Agent running/reachable, transport setting, Wi-Fi portal or serial device/baud |
+| Callback never runs | Topic name and message type match, executor has enough handles, `update()` runs continuously |
+| Node restarts | `RosNodeManager` connection watchdog; inspect Agent and transport logs |
+| Build cannot find message/type headers | Confirm `board_microros_distro`, PlatformIO micro-ROS package, and dependency installation |
