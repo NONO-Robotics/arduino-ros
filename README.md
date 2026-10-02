@@ -311,3 +311,15 @@ void loop() {
 cd examples/basic_test
 pio run
 ```
+
+## 📊 Test Coverage
+
+The latest native regression coverage report is published with the documentation site:
+[nono-robotics.github.io/arduino-ros/coverage](https://nono-robotics.github.io/arduino-ros/coverage/) (regenerated on every push to `main`).
+
+Generate it locally with:
+
+```bash
+commands/regression-test
+# open coverage/index.html
+```
