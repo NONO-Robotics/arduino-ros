@@ -6,6 +6,8 @@
   [![PlatformIO Registry](https://img.shields.io/badge/PlatformIO-Registry-red.svg)](https://registry.platformio.org/libraries/adrianmarino/arduino-ros)
   [![Framework](https://img.shields.io/badge/Framework-Arduino-blue.svg)](https://www.arduino.cc/)
   [![ROS 2](https://img.shields.io/badge/ROS%202-Humble-22314E.svg)](https://docs.ros.org/en/humble/index.html)
+  [![Docs](https://img.shields.io/badge/docs-Doxygen-blue.svg)](https://nono-robotics.github.io/arduino-ros/)
+  [![Coverage](https://img.shields.io/badge/coverage-report-brightgreen.svg)](https://nono-robotics.github.io/arduino-ros/coverage/)
   [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 </div>
 
