@@ -1,12 +1,11 @@
 #pragma once
 #include <Arduino.h>
+#include <rcl/rcl.h>
 #ifdef USE_ROS_LOGGER
 #include "StringPublisher.h"
 #include "MicroRosPublisher.h"
-#include <rcl/rcl.h>
 #else
 class StringPublisher;
-struct rcl_node_t;
 #endif
 
 enum LogLevel { TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF };
