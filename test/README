@@ -1,0 +1,7 @@
+Run native Unity suites:
+
+    pio test -e native
+
+Run suites with coverage thresholds:
+
+    commands/regression-test

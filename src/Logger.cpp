@@ -1,6 +1,8 @@
 #include "Logger.h"
 
+#ifdef USE_ROS_LOGGER
 #include "MicroRosPublisher.h"
+#endif
 
 // ── Global instance — empty constructor, no side effects ─────────────
 Logger logger;
@@ -96,9 +98,11 @@ bool Logger::isError() { return level <= ERROR; }
 bool Logger::isFatal() { return level <= FATAL; }
 bool Logger::isOff()   { return level == OFF;   }
 
+#ifdef USE_ROS_LOGGER
 void Logger::initRosPublisher(rcl_node_t* node)
 {
     ros_log_publisher = new StringPublisher(
         MicroRosPublisher::createString(node, "/microrosout")
     );
 }
+#endif
