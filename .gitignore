@@ -6,7 +6,8 @@ examples/basic_test/.pio
 
 __pycache__/
 .codebase-memory/
-/.pio/
+.pio/
 coverage/
 *.gcov
 docs/
+compile_commands.json
