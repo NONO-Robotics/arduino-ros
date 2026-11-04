@@ -14,6 +14,7 @@ Arduino-ROS provides shared micro-ROS lifecycle, publishers, subscribers, and ro
 - [Build and tests](#build-and-tests)
 - [Troubleshooting](#troubleshooting)
 
+\anchor requirements-and-installation
 ## Requirements and installation
 
 - ESP32, Arduino framework, PlatformIO, and a ROS 2 Humble micro-ROS Agent reachable over configured Wi-Fi or serial transport.
@@ -34,6 +35,7 @@ lib_deps =
 
 Configure the micro-ROS Agent endpoint and the `board_microros_transport` setting for your PlatformIO micro-ROS package. The Wi-Fi example below also enables this library's `USE_WIFI_TRANSPORT` path.
 
+\anchor how-a-node-runs
 ## How a node runs
 
 Create and initialize the node once in `setup()`. Create publishers and subscribers after `setup()` has initialized the node and executor. Call `update()` on every pass through `loop()` so incoming callbacks run and connection health is monitored.
@@ -56,6 +58,7 @@ sequenceDiagram
 
 `setup()` returns the same manager pointer for convenient chaining. Its first connection is bounded; a missing Agent or lost connection can cause the ESP32 to restart, as documented in [`RosNodeManager`](include/RosNodeManager.h). Do not add blocking delays to `loop()`; call `update()` frequently.
 
+\anchor transport-configuration
 ## Transport configuration
 
 ### Wi-Fi
@@ -71,6 +74,7 @@ build_flags = -DUSE_WIFI_TRANSPORT
 
 Use the PlatformIO micro-ROS serial transport and omit `USE_WIFI_TRANSPORT`. Set the Agent-side serial connection and baud rate consistently with firmware; manager default baud rate is `921600`.
 
+\anchor api-overview
 ## API overview
 
 | Area | Types | Role |
@@ -87,6 +91,7 @@ Use the PlatformIO micro-ROS serial transport and omit `USE_WIFI_TRANSPORT`. Set
 
 ROS graph ownership flows one direction: firmware creates ROS entities from the initialized node/executor; callbacks update application state; `loop()` services the executor.
 
+\anchor examples
 ## Examples
 
 ### Minimal lifecycle and `/cmd_vel` subscriber
@@ -247,6 +252,7 @@ void loop() {
 
 The `RosNodeManager` constructor's arguments differ when `USE_WIFI_TRANSPORT` is defined because Wi-Fi options precede the common arguments. Prefer defaults unless firmware has concrete reason to configure executor capacity or timing; ensure capacity covers every registered subscription.
 
+\anchor build-and-tests
 ## Build and tests
 
 Compile the included PlatformIO example:
@@ -265,6 +271,7 @@ commands/regression-test
 
 The regression command prints coverage and creates `coverage/index.html`. Native tests do not validate transport connectivity, ROS graph interoperability, electrical IO, or sensor/motor integration; validate these on the intended hardware before deployment.
 
+\anchor troubleshooting
 ## Troubleshooting
 
 | Symptom | Check |
