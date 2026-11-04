@@ -83,11 +83,12 @@ Use the PlatformIO micro-ROS serial transport and omit `USE_WIFI_TRANSPORT`. Set
 | Basic publishers | `StringPublisher`, `IntPublisher`, `FloatPublisher`, `FloatArrayPublisher` | `std_msgs` string, integer, float, and float-array messages |
 | Sensor publishers | `IMUPublisher`, `GPSPublisher` | `sensor_msgs/Imu` and `sensor_msgs/NavSatFix` |
 | Motion input | `RosTwistSubscriber` | Receives `geometry_msgs/Twist` commands, commonly `/cmd_vel` |
+| Boolean command input | `BoolSubscriber` | Receives `std_msgs/Bool` commands through a typed callback |
 | Wheel feedback input | `WheelSpeedsSubscriber` | Validates six-element `Float32MultiArray` and provides typed `WheelSpeeds` |
 | Odometry | `DifferentialRobotOdometryPublisher`, `Vector3StampedPublisher` | Publishes odometry state or stamped vectors |
 | Utilities | `Logger`, `MicroRosTimeUtils` | Serial/ROS logging and Agent time synchronization |
 
-`ArduinoRos.h` is the umbrella include for most APIs. Include `WheelSpeedsSubscriber.h` explicitly; that header is not currently included by the umbrella. `WheelSpeedsSubscriber` accepts exactly six finite float values, in order: left average, right average, front-left, front-right, back-left, back-right. Its fault callback runs on null, wrong-size, or non-finite input. The `WheelSpeeds` type comes from `arduino-commons` and uses rad/s.
+`ArduinoRos.h` is the umbrella include for most APIs. Include `BoolSubscriber.h` and `WheelSpeedsSubscriber.h` explicitly; those headers are not currently included by the umbrella. `BoolSubscriber` invokes its callback with a `const std_msgs__msg__Bool &`. `WheelSpeedsSubscriber` accepts exactly six finite float values, in order: left average, right average, front-left, front-right, back-left, back-right. Its fault callback runs on null, wrong-size, or non-finite input. The `WheelSpeeds` type comes from `arduino-commons` and uses rad/s.
 
 ROS graph ownership flows one direction: firmware creates ROS entities from the initialized node/executor; callbacks update application state; `loop()` services the executor.
 
@@ -126,6 +127,36 @@ void loop() {
 ```
 
 The subscriber stores callback registration internally. Keep the subscriber alive for the node lifetime. In application firmware, keep all entity creation in `setup()` and use project ownership conventions for its lifetime; never allocate publishers/subscribers per message or per loop iteration.
+
+### Boolean command subscriber
+
+`BoolSubscriber` dispatches `std_msgs/Bool` messages to a typed callback. Keep the callback limited to updating application state; enforce motor, actuator, or safety policies in the firmware that owns the hardware.
+
+```cpp
+#include <Arduino.h>
+#include <BoolSubscriber.h>
+#include <RosNodeManager.h>
+
+RosNodeManager nodeManager("cutting_node");
+BoolSubscriber *cuttingCommand;
+bool cuttingRequested = false;
+
+void onCuttingCommand(const std_msgs__msg__Bool &message) {
+  cuttingRequested = message.data;
+}
+
+void setup() {
+  nodeManager.setup();
+  cuttingCommand = new BoolSubscriber(
+      nodeManager.getNode(), nodeManager.getExecutor(),
+      "cutting_system/command/on_off", onCuttingCommand);
+}
+
+void loop() {
+  nodeManager.update();
+  // Apply cuttingRequested through the firmware's safety controller.
+}
+```
 
 ### Basic publisher
 
