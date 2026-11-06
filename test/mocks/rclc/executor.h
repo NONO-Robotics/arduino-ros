@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <vector>
 
 #include <rcl/rcl.h>
@@ -7,6 +8,33 @@
 struct rclc_executor_t {
   int dummy = 0;
 };
+
+struct rclc_support_t {
+  rcl_context_t context;
+};
+
+namespace rclc_node_manager_mock {
+inline rcl_ret_t spin_result = RCL_RET_OK;
+}
+
+inline rcl_ret_t rclc_executor_spin_some(rclc_executor_t *, uint64_t) {
+  return rclc_node_manager_mock::spin_result;
+}
+
+inline rcl_ret_t rclc_executor_init(rclc_executor_t *, rcl_context_t *, size_t,
+                                    rcl_allocator_t *) {
+  return RCL_RET_OK;
+}
+
+inline rcl_ret_t rclc_support_init(rclc_support_t *, int, void *,
+                                   rcl_allocator_t *) {
+  return RCL_RET_OK;
+}
+
+inline rcl_ret_t rclc_node_init_default(rcl_node_t *, const char *, const char *,
+                                        rclc_support_t *) {
+  return RCL_RET_OK;
+}
 
 constexpr int ON_NEW_DATA = 0;
 

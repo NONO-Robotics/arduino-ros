@@ -83,6 +83,7 @@ class HardwareSerial {
   // arduino-ros addition: capture baud for Logger tests.
   unsigned long baud = 0;
   void begin(unsigned long value, uint32_t = SERIAL_8N1, int = -1, int = -1) { baud = value; }
+  void flush() {}
   // arduino-ros addition: Arduino serial readiness check used by Logger.
   bool connected = true;
   explicit operator bool() const { return connected; }
@@ -107,5 +108,12 @@ class HardwareSerial {
 inline HardwareSerial Serial;
 // arduino-ros addition: Logger supports ESP32 Serial2 output.
 inline HardwareSerial Serial2;
+
+class EspMock {
+ public:
+  void restart() {}
+};
+
+inline EspMock ESP;
 
 inline esp_reset_reason_t esp_reset_reason() { return arduino_mock::reset_reason; }

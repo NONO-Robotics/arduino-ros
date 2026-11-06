@@ -15,6 +15,16 @@ struct rcl_node_t {
   int dummy = 0;
 };
 
+struct rcl_context_t {
+  int dummy = 0;
+};
+
+struct rcl_allocator_t {
+  int dummy = 0;
+};
+
+inline rcl_allocator_t rcl_get_default_allocator() { return {}; }
+
 struct rcl_publisher_t {
   const rosidl_message_type_support_t *type_support = nullptr;
   const char *topic = nullptr;
