@@ -80,9 +80,11 @@ RosNodeManager *RosNodeManager::setup()
     this->restart();
   }
 
+#ifndef PIO_UNIT_TESTING
   if (syncTime) {
     MicroRosTimeUtils::syncSessionWithRetry(500, 50);
   }
+#endif
 
   logger.info("Connected to Ros2 Agent and Entities Created Successfully");
   return this;
@@ -98,6 +100,7 @@ rclc_executor_t *RosNodeManager::getExecutor() { return &executor; }
 
 bool RosNodeManager::update(const uint64_t timeout_ns)
 {
+  bool agentConnected = true;
   checkAgentConnection->update();
 #ifdef USE_WIFI_TRANSPORT
   wifiResetDetector.update();
@@ -106,6 +109,7 @@ bool RosNodeManager::update(const uint64_t timeout_ns)
   if (checkAgentConnection->hasBeenReached())
   {
     if (!this->isConnected(agentRequestTimeoutMs)) {
+      agentConnected = false;
       this->failedPingsCount++;
       logger.warn("Connection to Micro-ROS Agent Lost! Strike: " + String(this->failedPingsCount));
       
@@ -120,8 +124,9 @@ bool RosNodeManager::update(const uint64_t timeout_ns)
     checkAgentConnection->reset();
   }
 
-  return assertOk(rclc_executor_spin_some(&executor, timeout_ns),
-                  "Cant't Node Manager state");
+  const bool executorUpdated = assertOk(rclc_executor_spin_some(&executor, timeout_ns),
+                                        "Cant't Node Manager state");
+  return agentConnected && executorUpdated;
 }
 
 bool RosNodeManager::isConnected(const int timeout_ms, const uint8_t attempts)
