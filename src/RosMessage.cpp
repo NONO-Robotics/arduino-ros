@@ -29,6 +29,18 @@ std_msgs__msg__Float32MultiArray *createFloatArrayMessage(size_t length)
   return msg;
 }
 
+std_msgs__msg__Int32MultiArray *createInt32ArrayMessage(size_t length) {
+  auto *msg = new std_msgs__msg__Int32MultiArray();
+  msg->data.data = static_cast<int32_t *>(malloc(sizeof(int32_t) * length));
+  if (msg->data.data == NULL) {
+    delete msg;
+    return NULL;
+  }
+  msg->data.size = length;
+  msg->data.capacity = length;
+  return msg;
+}
+
 geometry_msgs__msg__Vector3Stamped *createVector3StampedMessage(String frameId) 
 {
   geometry_msgs__msg__Vector3Stamped *msg = geometry_msgs__msg__Vector3Stamped__create();

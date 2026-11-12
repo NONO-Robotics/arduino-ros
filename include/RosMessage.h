@@ -7,6 +7,7 @@
 #include <std_msgs/msg/float32.h>
 #include <std_msgs/msg/float32_multi_array.h>
 #include <std_msgs/msg/int32.h>
+#include <std_msgs/msg/int32_multi_array.h>
 #include <std_msgs/msg/string.h>
 #include <geometry_msgs/msg/vector3_stamped.h>
 
@@ -28,6 +29,13 @@ std_msgs__msg__Int32 *createIntMessage();
  * @return Pointer to the created std_msgs__msg__Float32MultiArray message.
  */
 std_msgs__msg__Float32MultiArray *createFloatArrayMessage(size_t length);
+
+/**
+ * @brief Create an Int32MultiArray message.
+ * @param length Length of the array.
+ * @return Pointer to the created std_msgs__msg__Int32MultiArray message.
+ */
+std_msgs__msg__Int32MultiArray *createInt32ArrayMessage(size_t length);
 
 /**
  * @brief Create a geometry_msgs__msg__Vector3Stamped message.
