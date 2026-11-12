@@ -8,7 +8,7 @@ MecanumStrategy::MecanumStrategy(float l, float w, float r) {
 }
 
 void MecanumStrategy::compute(float vx, float vy, float wz,
-                               FourWheelAngularSpeed &out) {
+                              FourWheelAngularSpeed &out) {
   float fl = (1.0f / r) * (vx - vy - k * wz);
   float fr = (1.0f / r) * (vx + vy + k * wz);
   float bl = (1.0f / r) * (vx + vy - k * wz);
@@ -25,11 +25,12 @@ SkidSteerStrategy::SkidSteerStrategy(float l, float r_front, float r_back) {
 }
 
 void SkidSteerStrategy::compute(float vx, float vy, float wz,
-                                 FourWheelAngularSpeed &out) {
+                                FourWheelAngularSpeed &out) {
   // Note: Right side motors have invertDirection() applied at hardware level,
-  // so we negate wz to produce correct turning direction (positive wz = left turn)
-  float v_left = vx + (l / 2.0f) * wz;
-  float v_right = vx - (l / 2.0f) * wz;
+  // so we negate wz to produce correct turning direction (positive wz = left
+  // turn)
+  float v_left = vx - (l / 2.0f) * wz;
+  float v_right = vx + (l / 2.0f) * wz;
 
   float fl = v_left / r_front;
   float fr = v_right / r_front;
@@ -41,8 +42,7 @@ void SkidSteerStrategy::compute(float vx, float vy, float wz,
 // --- FWAngularSpeedWriter ---
 
 FWAngularSpeedWriter::FWAngularSpeedWriter(
-    AngularSpeedStrategy *strategy,
-    FourWheelAngularSpeed *angularSpeed) {
+    AngularSpeedStrategy *strategy, FourWheelAngularSpeed *angularSpeed) {
   this->strategy = strategy;
   this->angularSpeed = angularSpeed;
 }
