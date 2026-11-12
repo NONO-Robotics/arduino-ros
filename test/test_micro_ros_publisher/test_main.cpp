@@ -25,6 +25,11 @@ void test_factories_select_type_support_and_topic() {
   MicroRosPublisher *array_pub =
       MicroRosPublisher::createFloatArray(&node, "/array");
   TEST_ASSERT_EQUAL_STRING("std_msgs/msg/Float32MultiArray",
+                            rcl_mock::last_type_support.c_str());
+
+  MicroRosPublisher *int32_array_pub =
+      MicroRosPublisher::createInt32Array(&node, "/int32_array");
+  TEST_ASSERT_EQUAL_STRING("std_msgs/msg/Int32MultiArray",
                            rcl_mock::last_type_support.c_str());
 
   MicroRosPublisher *vector_pub =
@@ -38,11 +43,12 @@ void test_factories_select_type_support_and_topic() {
                            rcl_mock::last_type_support.c_str());
 
   // Asserts
-  TEST_ASSERT_EQUAL_INT(5, rcl_mock::publisher_default_inits);
+  TEST_ASSERT_EQUAL_INT(6, rcl_mock::publisher_default_inits);
   TEST_ASSERT_EQUAL_INT(0, rcl_mock::publisher_best_effort_inits);
   delete int_pub;
   delete float_pub;
   delete array_pub;
+  delete int32_array_pub;
   delete vector_pub;
   delete string_pub;
 }

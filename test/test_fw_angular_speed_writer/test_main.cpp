@@ -29,10 +29,10 @@ void test_skid_steer_strategy_computes_all_wheels() {
   strategy.compute(1.0f, 99.0f, 2.0f, speeds);
 
   // Asserts
-  TEST_ASSERT_FLOAT_WITHIN(0.0001f, 16.0f, speeds.getFlWInRad());
-  TEST_ASSERT_FLOAT_WITHIN(0.0001f, 4.0f, speeds.getFrWInRad());
-  TEST_ASSERT_FLOAT_WITHIN(0.0001f, 8.0f, speeds.getBlWInRad());
-  TEST_ASSERT_FLOAT_WITHIN(0.0001f, 2.0f, speeds.getBrWInRad());
+  TEST_ASSERT_FLOAT_WITHIN(0.0001f, 4.0f, speeds.getFlWInRad());
+  TEST_ASSERT_FLOAT_WITHIN(0.0001f, 16.0f, speeds.getFrWInRad());
+  TEST_ASSERT_FLOAT_WITHIN(0.0001f, 2.0f, speeds.getBlWInRad());
+  TEST_ASSERT_FLOAT_WITHIN(0.0001f, 8.0f, speeds.getBrWInRad());
 }
 
 void test_writer_delegates_twist_to_strategy() {

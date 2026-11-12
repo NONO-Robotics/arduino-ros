@@ -49,6 +49,28 @@ void test_float_array_message_returns_null_when_allocation_fails() {
   TEST_ASSERT_NULL(message);
 }
 
+void test_int32_array_message_allocates_requested_length() {
+  resetMocks();
+
+  std_msgs__msg__Int32MultiArray* message = createInt32ArrayMessage(4);
+
+  TEST_ASSERT_NOT_NULL(message);
+  TEST_ASSERT_NOT_NULL(message->data.data);
+  TEST_ASSERT_EQUAL_UINT32(4, message->data.size);
+  TEST_ASSERT_EQUAL_UINT32(4, message->data.capacity);
+  std::free(message->data.data);
+  delete message;
+}
+
+void test_int32_array_message_returns_null_when_allocation_fails() {
+  resetMocks();
+
+  std_msgs__msg__Int32MultiArray* message =
+      createInt32ArrayMessage(std::numeric_limits<size_t>::max());
+
+  TEST_ASSERT_NULL(message);
+}
+
 void test_vector_message_assigns_frame_id() {
   // Prepare
   resetMocks();
@@ -95,6 +117,8 @@ int main() {
   RUN_TEST(test_scalar_messages_are_zero_initialized);
   RUN_TEST(test_float_array_message_allocates_requested_length);
   RUN_TEST(test_float_array_message_returns_null_when_allocation_fails);
+  RUN_TEST(test_int32_array_message_allocates_requested_length);
+  RUN_TEST(test_int32_array_message_returns_null_when_allocation_fails);
   RUN_TEST(test_vector_message_assigns_frame_id);
   RUN_TEST(test_vector_message_returns_null_when_create_fails);
   RUN_TEST(test_vector_message_destroys_message_when_assign_fails);
