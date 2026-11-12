@@ -15,6 +15,16 @@ struct rclc_support_t {
 
 namespace rclc_node_manager_mock {
 inline rcl_ret_t spin_result = RCL_RET_OK;
+inline rcl_ret_t support_init_result = RCL_RET_OK;
+inline rcl_ret_t node_init_result = RCL_RET_OK;
+inline rcl_ret_t executor_init_result = RCL_RET_OK;
+
+inline void reset() {
+  spin_result = RCL_RET_OK;
+  support_init_result = RCL_RET_OK;
+  node_init_result = RCL_RET_OK;
+  executor_init_result = RCL_RET_OK;
+}
 }
 
 inline rcl_ret_t rclc_executor_spin_some(rclc_executor_t *, uint64_t) {
@@ -22,18 +32,18 @@ inline rcl_ret_t rclc_executor_spin_some(rclc_executor_t *, uint64_t) {
 }
 
 inline rcl_ret_t rclc_executor_init(rclc_executor_t *, rcl_context_t *, size_t,
-                                    rcl_allocator_t *) {
-  return RCL_RET_OK;
+                                     rcl_allocator_t *) {
+  return rclc_node_manager_mock::executor_init_result;
 }
 
 inline rcl_ret_t rclc_support_init(rclc_support_t *, int, void *,
                                    rcl_allocator_t *) {
-  return RCL_RET_OK;
+  return rclc_node_manager_mock::support_init_result;
 }
 
 inline rcl_ret_t rclc_node_init_default(rcl_node_t *, const char *, const char *,
-                                        rclc_support_t *) {
-  return RCL_RET_OK;
+                                         rclc_support_t *) {
+  return rclc_node_manager_mock::node_init_result;
 }
 
 constexpr int ON_NEW_DATA = 0;
