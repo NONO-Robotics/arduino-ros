@@ -46,6 +46,18 @@ public:
    * @param reliable Use reliable QoS instead of best-effort
    */
   static MicroRosPublisher *createFloatArray(rcl_node_t *node,
+                                              String topic_name,
+                                              int delayMillis = 0,
+                                              bool reliable = true);
+
+  /**
+   * Create a publisher for Int32 arrays.
+   * @param node Pointer to the ROS node.
+   * @param topic_name Name of the topic to publish.
+   * @param delayMillis Delay in milliseconds between messages.
+   * @param reliable Use reliable QoS instead of best-effort.
+   */
+  static MicroRosPublisher *createInt32Array(rcl_node_t *node,
                                              String topic_name,
                                              int delayMillis = 0,
                                              bool reliable = true);
