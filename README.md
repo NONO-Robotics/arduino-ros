@@ -84,11 +84,12 @@ Use the PlatformIO micro-ROS serial transport and omit `USE_WIFI_TRANSPORT`. Set
 | Sensor publishers | `IMUPublisher`, `GPSPublisher` | `sensor_msgs/Imu` and `sensor_msgs/NavSatFix` |
 | Motion input | `RosTwistSubscriber` | Receives `geometry_msgs/Twist` commands, commonly `/cmd_vel` |
 | Boolean command input | `BoolSubscriber` | Receives `std_msgs/Bool` commands through a typed callback |
+| Float command input | `Float32Subscriber` | Receives `std_msgs/Float32` commands through a typed callback |
 | Wheel feedback input | `WheelSpeedsSubscriber` | Validates six-element `Float32MultiArray` and provides typed `WheelSpeeds` |
 | Odometry | `DifferentialRobotOdometryPublisher`, `Vector3StampedPublisher` | Publishes odometry state or stamped vectors |
 | Utilities | `Logger`, `MicroRosTimeUtils` | Serial/ROS logging and Agent time synchronization |
 
-`ArduinoRos.h` is the umbrella include for most APIs. Include `BoolSubscriber.h` and `WheelSpeedsSubscriber.h` explicitly; those headers are not currently included by the umbrella. `BoolSubscriber` invokes its callback with a `const std_msgs__msg__Bool &`. `WheelSpeedsSubscriber` accepts exactly six finite float values, in order: left average, right average, front-left, front-right, back-left, back-right. Its fault callback runs on null, wrong-size, or non-finite input. The `WheelSpeeds` type comes from `arduino-commons` and uses rad/s.
+`ArduinoRos.h` is the umbrella include for most APIs. Include `BoolSubscriber.h`, `Float32Subscriber.h`, and `WheelSpeedsSubscriber.h` explicitly; those headers are not currently included by the umbrella. `BoolSubscriber` invokes its callback with a `const std_msgs__msg__Bool &`; `Float32Subscriber` uses a `const std_msgs__msg__Float32 &`. `WheelSpeedsSubscriber` accepts exactly six finite float values, in order: left average, right average, front-left, front-right, back-left, back-right. Its fault callback runs on null, wrong-size, or non-finite input. The `WheelSpeeds` type comes from `arduino-commons` and uses rad/s.
 
 ROS graph ownership flows one direction: firmware creates ROS entities from the initialized node/executor; callbacks update application state; `loop()` services the executor.
 
